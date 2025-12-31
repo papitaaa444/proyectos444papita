@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>💌 Ruta hacia la carta</title>
+  <style>
+    :root{
+      --bg:#fff0f5; --prim:#d6336c; --acent:#5a189a;
+      --btn:#ff69b4; --btn-active:#ff85c1; --panel:#ffe4ec; --texto:#7a2240;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Helvetica, Arial, sans-serif; background:var(--bg); color:var(--texto)}
+    .app{max-width:760px; margin:24px auto; padding:16px}
+    h1{color:var(--prim); font-size:28px; margin:0 0 8px}
+    h2{color:var(--acent); font-size:18px; margin:12px 0}
+    .card{background:white; border-radius:14px; padding:18px; box-shadow:0 8px 24px rgba(214,51,108,.12); border:1px solid #f6cadb}
+    .row{margin:10px 0}
+    .btn{background:var(--btn); color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer}
+    .btn:active{background:var(--btn-active)}
+    .btn.alt{background:#9c36b5}
+    .grid{display:grid; gap:10px}
+    .grid.mem{grid-template-columns:repeat(3,1fr)}
+    .mem-btn{background:#ffb3c6; border:none; border-radius:10px; height:70px; font-size:26px; cursor:pointer}
+    .panel{background:var(--panel); border-radius:12px; padding:12px}
+    .msg{white-space:pre-line; line-height:1.5}
+    .counter{color:var(--acent); font-weight:bold}
+    .hearts{position:relative; height:360px; background:var(--panel); border-radius:12px; overflow:hidden}
+    .heart{position:absolute; font-size:22px; cursor:pointer; user-select:none}
+    .float-heart{position:absolute; left:0; bottom:0; font-size:20px; animation:up 3s linear forwards}
+    @keyframes up { to { transform:translateY(-320px); opacity:.2 } }
+    .hidden{display:none}
+    .center{display:flex; gap:8px; align-items:center}
+    .input{padding:8px 10px; border-radius:10px; border:1px solid #e5a3bb; font-size:14px}
+    footer{margin-top:16px; text-align:center; color:#a34c6c}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="card">
+      <h1>💌 Ruta hacia la carta</h1>
+      <div id="screen"></div>
+    </div>
+    <footer>Creado con cariño por Scarlett ❤️</footer>
+  </div>
+
+  <script>
+    const state = {
+      caught:0, target:7,
+      memValues:[], memSel:[], memMatched:0,
+      trivia: {
+        preguntas: [
+          {q:"¿Qué selección ganó el Mundial de 2014?", ops:["Alemania","Brasil","Argentina"], ok:"Alemania"},
+          {q:"¿Quién salió como mejor jugador de Chile en 2025?", ops:["Alexis Sánchez","Arturo Vidal","Charles Aránguiz"], ok:null},
+          {q:"¿Cuántos jugadores tiene un equipo en cancha?", ops:["9","10","11"], ok:"11"}
+        ],
+        resp:{}
+      },
+      secret: Math.floor(Math.random()*10)+1,
+      intentos:5
+    };
+
+    const screen = document.getElementById('screen');
+
+    function btn(label, onclick, cls="btn"){ const b=document.createElement('button'); b.className=cls; b.textContent=label; b.onclick=onclick; return b; }
+    function h2(t){ const el=document.createElement('h2'); el.textContent=t; return el; }
+    function row(){ const el=document.createElement('div'); el.className='row'; return el; }
+    function panel(){ const el=document.createElement('div'); el.className='panel'; return el; }
+    function set(t){ screen.innerHTML=''; screen.appendChild(t); }
+
+    // Juego 1: Quiz
+    function juego1(){
+      const wrap = document.createElement('div');
+      wrap.appendChild(h2("🎮 Juego 1: Quiz de recuerdos"));
+      const preguntas = [
+        {q:"¿Cuál fue nuestro primer plan juntos?", ops:["cine","cafe","sushi"], ok:"sushi"},
+        {q:"¿Qué color te recuerda a mí?", ops:["azul","rosado","negro"], ok:"rosado"},
+        {q:"¿Qué es lo que más hacemos?", ops:["leer","viajar","jugar"], ok:"jugar"}
+      ];
+      const respuestas = {};
+      preguntas.forEach((p,i)=>{
+        const r = row();
+        const q = document.createElement('div'); q.style.fontWeight='700'; q.style.color='var(--acent)'; q.textContent=p.q;
+        r.appendChild(q);
+        const opts = row();
+        p.ops.forEach(op=>{
+          const label = document.createElement('label'); label.style.marginRight='10px';
+          const input = document.createElement('input'); input.type='radio'; input.name='q'+i; input.value=op;
+          input.onchange=()=>respuestas[i]=op;
+          label.appendChild(input); label.append(' '+op);
+          opts.appendChild(label);
+        });
+        r.appendChild(opts);
+        wrap.appendChild(r);
+      });
+      const res = document.createElement('div'); res.style.margin='8px 0';
+      wrap.appendChild(res);
+      wrap.appendChild(btn("Enviar respuestas", ()=>{
+        let score=0;
+        preguntas.forEach((p,i)=>{ if(respuestas[i]===p.ok) score++; });
+        if(score===preguntas.length){
+          res.textContent="✅ ¡Perfecto! Avanza cuando quieras."; res.style.color='green';
+          wrap.appendChild(btn("Siguiente ➡️", juego2));
+        }else{
+          res.textContent=`❌ Fallaste (${score}/${preguntas.length}). Intenta de nuevo.`; res.style.color='#b00020';
+        }
+      }));
+      set(wrap);
+    }
+
+    // Juego 2: Atrapa corazones
+    function juego2(){
+      const wrap = document.createElement('div');
+      wrap.appendChild(h2("🎮 Juego 2: Atrapa corazones ❤️"));
+      const hearts = document.createElement('div'); hearts.className='hearts';
+      wrap.appendChild(hearts);
+      const counter = document.createElement('div'); counter.className='counter'; counter.textContent=`Corazones atrapados: ${state.caught}/${state.target}`;
+      wrap.appendChild(counter);
+      let running=false, timer=null;
+
+      function spawn(){
+        if(!running) return;
+        if(state.caught>=state.target) {
+          clearInterval(timer); running=false;
+          wrap.appendChild(btn("Siguiente ➡️", juego3));
+          return;
+        }
+        const h=document.createElement('div'); h.className='heart'; h.textContent='❤️';
+        const size=[18,20,22,24][Math.floor(Math.random()*4)];
+        h.style.fontSize=size+'px';
+        h.style.left=Math.floor(Math.random()*440+20)+'px';
+        h.style.top=Math.floor(Math.random()*300+40)+'px';
+        h.onclick=()=>{
+          h.textContent='💖';
+          setTimeout(()=>h.remove(),200);
+          state.caught++; counter.textContent=`Corazones atrapados: ${state.caught}/${state.target}`;
+          if(state.caught>=state.target && running){
+            clearInterval(timer); running=false;
+            wrap.appendChild(btn("Siguiente ➡️", juego3));
+          }
+        };
+        hearts.appendChild(h);
+      }
+
+      const controls = row(); controls.className='center';
+      controls.appendChild(btn("Iniciar ➡️", ()=>{ if(!running){ running=true; timer=setInterval(spawn,800); } }));
+      controls.appendChild(btn("Detener ⏸️", ()=>{ running=false; clearInterval(timer); }, 'btn alt'));
+      wrap.appendChild(controls);
+      set(wrap);
+    }
+
+    // Juego 3: Adivinanza
+    function juego3(){
+      const wrap = document.createElement('div');
+      wrap.appendChild(h2("🎮 Juego 3: Adivinanza"));
+      const m = panel();
+      m.classList.add('msg');
+      m.textContent = "Viajo entre estrellas, un niño de cabellos dorados,\nbusco la amistad, a mis amigos he domesticado.\nLo importante no se ve, se siente con el alma,\n¿Quién soy, que te enseño el amor sin calma?";
+      wrap.appendChild(m);
+      const inp = document.createElement('input'); inp.className='input'; inp.placeholder='Escribe tu respuesta';
+      const res = document.createElement('div'); res.style.marginTop='8px';
+      const actions = row();
+      actions.appendChild(inp);
+      actions.appendChild(btn("Responder", ()=>{
+        if((inp.value||'').trim().toLowerCase()==='el principito'){
+          res.textContent='✅ ¡Correcto!'; res.style.color='green';
+          actions.appendChild(btn("Siguiente ➡️", juego4));
+        }else{
+          res.textContent='❌ No es correcto. Pista: El Principito'; res.style.color='#b00020';
+        }
+      }));
+      wrap.appendChild(actions);
+      wrap.appendChild(res);
+      set(wrap);
+    }
+
+    // Juego 4: Memoria
+    function juego4(){
+      const wrap = document.createElement('div');
+      wrap.appendChild(h2("🎮 Juego 4: Memoria de corazones"));
+      const values=["❤️","❤️","💖","💖","💕","💕"].sort(()=>Math.random()-0.5);
+      state.memValues=values; state.memSel=[]; state.memMatched=0;
+      const grid = document.createElement('div'); grid.className='grid mem';
+      const info = document.createElement('div'); info.className='counter'; info.textContent='Encuentra las 3 parejas';
+      const btns=[];
+      for(let i=0;i<6;i++){
+        const b=document.createElement('button'); b.className='mem-btn'; b.textContent='❓';
+        b.onclick=()=>{
+          if(b.textContent!=='❓') return;
+          b.textContent=values[i];
+          state.memSel.push(i);
+          if(state.memSel.length===2){
+            const [a,bid]=state.memSel;
+            if(values[a]===values[bid]){
+              state.memMatched++;
+              state.memSel=[];
+              info.textContent=`Parejas encontradas: ${state.memMatched}/3`;
+              if(state.memMatched===3){
+                wrap.appendChild(btn("Siguiente ➡️", juego5));
+              }
+            }else{
+              setTimeout(()=>{
+                btns[a].textContent='❓';
+                btns[bid].textContent='❓';
+                state.memSel=[];
+              },800);
+            }
+          }
+        };
+        btns.push(b); grid.appendChild(b);
+      }
+      wrap.appendChild(grid);
+      wrap.appendChild(info);
+      set(wrap);
+    }
+
+    // Juego 5: Trivia
+    function juego5(){
+      const wrap = document.createElement('div');
+      wrap.appendChild(h2("🎮 Juego 5: Trivia de Fútbol"));
+      const res = document.createElement('div'); res.style.marginTop='10px';
+      state.trivia.resp={};
+      state.trivia.preguntas.forEach((p, i)=>{
+        const block = row();
+        const q = document.createElement('div'); q.style.fontWeight='700'; q.style.color='var(--acent)'; q.textContent=p.q;
+        block.appendChild(q);
+        const ops = row();
+        p.ops.forEach(op=>{
+          const label=document.createElement('label'); label.style.marginRight='10px';
+          const input=document.createElement('input'); input.type='radio'; input.name='t'+i; input.value=op;
+          input.onchange=()=>state.trivia.resp[i]=op;
+          label.appendChild(input); label.append(' '+op);
+          ops.appendChild(label);
+        });
+        block.appendChild(ops);
+        wrap.appendChild(block);
+      });
+      let nextBtn=null;
+      const mensajeNota = "⭐ Nota especial: El mejor futbolista de este año serías tú Kevin Encina,\nporque lamentablemente no te conocí antes :3,\npero desde ahora lo eres y en adelante lo serás a no ser que te alejes de mí,\nahí dejarás de serlo, pero como no pasará, no hay por qué pensar en eso :b.";
+      const enviar = btn("Enviar respuestas", ()=>{
+        const total = state.trivia.preguntas.length;
+        let score = 0;
+        state.trivia.preguntas.forEach((p,i)=>{
+          const ok = p.ok;
+          if(ok!==null && state.trivia.resp[i]===ok) score++;
+        });
+        res.style.whiteSpace='pre-line';
+        if(score === total-1){
+          res.textContent = mensajeNota;
+          if(!nextBtn){ nextBtn = btn("Siguiente ➡️", juego6); wrap.appendChild(nextBtn); }
+        }else{
+          res.textContent = `❌ Fallaste (${score}/${total-1} válidas). Corrige las otras preguntas.\n\n`+mensajeNota;
+          if(nextBtn){ nextBtn.remove(); nextBtn=null; }
+        }
+      });
+      wrap.appendChild(enviar);
+      wrap.appendChild(res);
+      set(wrap);
+    }
+
+    // Juego 6: Adivina el número
+    function juego6(){
+      const wrap = document.createElement('div');
+      wrap.appendChild(h2("🎮 Juego 6: Adivina el número"));
+      const info = document.createElement('div'); info.className='counter'; info.textContent='He pensado un número entre 1 y 10';
+      const caja = row(); caja.className='center';
+      const inp = document.createElement('input'); inp.className='input'; inp.type='number'; inp.min='1'; inp.max='10'; inp.placeholder='1-10';
+      const out = document.createElement('div'); out.style.marginTop='8px';
+      const tries = document.createElement('div'); tries.className='counter'; tries.textContent = `Intentos restantes: ${state.intentos}`;
+      caja.appendChild(inp);
+      caja.appendChild(btn("Probar", ()=>{
+        const val = parseInt(inp.value,10);
+        if(isNaN(val) || val<1 || val>10){ out.textContent='❌ Ingresa un número válido (1–10)'; out.style.color='#b00020'; return; }
+        if(val===state.secret){ carta(); return; }
+        state.intentos--;
+        if(state.intentos<=0){
+          out.textContent = `Fin: era ${state.secret}. Volvemos al Quiz.`; out.style.color='#b00020';
+          setTimeout(()=>{ state.caught=0; state.target=7; state.intentos=5; state.secret=Math.floor(Math.random()*10)+1; juego1(); }, 1200);
+          return;
+        }
+        out.style.color='var(--acent)';
+        out.textContent = val<state.secret ? 'El número es más alto ⬆️' : 'El número es más bajo ⬇️';
+        tries.textContent = `Intentos restantes: ${state.intentos}`;
+      }));
+      wrap.appendChild(info);
+      wrap.appendChild(caja);
+      wrap.appendChild(out);
+    wrap.appendChild(tries);
+    set(wrap);
+    }
+
+    // Carta final
+    function carta(){
+    const wrap = document.createElement('div');
+    wrap.appendChild(h2("💌 Carta desbloqueada 💌"));
+    const texto = `Gracias por jugar y llegar hasta aquí.
+Cada corazón atrapado es un recuerdo, pude poner más de 7 pero seguirías atrapando corazones ya que son tantos.
+Pero bueno, te dejo esta pequeña carta virtual como fin de este código, es muy simple y sincera:
+Me importas, me inspiras y me haces querer ser mejor y no solo eso, de verdad me haces sentir tanto,
+que llega a darme miedo porque ahora que te conocí no quiero perderte nunca.
+Muchas gracias por tus detalles, de verdad los valoro un montón y me hacen muy feliz.
+Espero que este pequeño detalle también te haga feliz como tú lo haces conmigo.
+
+Byebye con cariño,
+Scarlett ❤️`;
+    const msg = document.createElement('div'); msg.className='panel msg'; msg.textContent=texto;
+    wrap.appendChild(msg);
+
+    const floatBox = document.createElement('div'); floatBox.style.position='relative'; floatBox.style.height='320px';
+    wrap.appendChild(floatBox);
+
+    function spawnFloatHeart(){
+        const h=document.createElement('div'); h.className='float-heart'; h.textContent='❤️';
+        h.style.left = Math.floor(Math.random()*520)+'px';
+        h.style.bottom = '0px';
+        h.style.fontSize = [16,18,20,22,24][Math.floor(Math.random()*5)]+'px';
+        floatBox.appendChild(h);
+        setTimeout(()=>h.remove(), 3000);
+    }
+    const interval = setInterval(spawnFloatHeart, 360);
+      // botón volver
+    const actions=row(); actions.appendChild(btn("Volver al inicio", ()=>{
+        clearInterval(interval);
+        // reset parcial
+        state.caught=0; state.intentos=5; state.secret=Math.floor(Math.random()*10)+1;
+        juego1();
+    }));
+    wrap.appendChild(actions);
+    set(wrap);
+    }
+
+    // Inicio
+    juego1();
+</script>
+</body>
+</html>
