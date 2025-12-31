@@ -1,1 +1,408 @@
+import tkinter as tk
+import random
+
+PALETA = {
+    "bg": "#fff0f5",
+    "primario": "#d6336c",
+    "acento": "#5a189a",
+    "boton": "#ff69b4",
+    "boton_activo": "#ff85c1",
+    "panel": "#ffe4ec",
+    "texto": "#7a2240",
+}
+
+class RutaCarta:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("💌 Ruta hacia la carta")
+        self.root.geometry("640x780")
+        self.root.configure(bg=PALETA["bg"])
+
+        self.frame = tk.Frame(root, bg=PALETA["bg"])
+        self.frame.pack(fill="both", expand=True)
+
+        # Estado general
+        self.spawn_running = False
+        self.spawn_after_id = None
+
+        # Inicio
+        self.juego1()
+
+    # Utilidades de UI
+    def limpiar(self):
+        if self.spawn_after_id is not None:
+            try:
+                self.root.after_cancel(self.spawn_after_id)
+            except Exception:
+                pass
+        self.spawn_after_id = None
+        self.spawn_running = False
+        for w in self.frame.winfo_children():
+            w.destroy()
+
+    def estilo_boton(self, texto, comando, color=None):
+        return tk.Button(
+            self.frame, text=texto, command=comando,
+            bg=color or PALETA["boton"], fg="white",
+            font=("Helvetica", 12, "bold"),
+            activebackground=PALETA["boton_activo"],
+            relief="groove", bd=3, padx=14, pady=8,
+            cursor="hand2"
+        )
+
+    def estilo_label(self, texto, tamaño=14, negrita=False, color=None, bg=None):
+        return tk.Label(
+            self.frame, text=texto,
+            bg=bg or PALETA["bg"],
+            fg=color or PALETA["texto"],
+            font=("Helvetica", tamaño, "bold" if negrita else "normal"),
+            pady=5
+        )
+
+    def titulo(self, texto):
+        return self.estilo_label(texto, 20, True, PALETA["primario"])
+
+    def subtitulo(self, texto):
+        return self.estilo_label(texto, 14, True, PALETA["acento"])
+
+    # --- Juego 1: Quiz ---
+    def juego1(self):
+        self.limpiar()
+        self.titulo("🎮 Juego 1: Quiz de recuerdos").pack(pady=10)
+
+        preguntas = [
+            ("¿Cuál fue nuestro primer plan juntos?", ["cine", "cafe", "sushi"], "sushi"),
+            ("¿Qué color te recuerda a mí?", ["azul", "rosado", "negro"], "rosado"),
+            ("¿Qué es lo que más hacemos?", ["leer", "viajar", "jugar"], "jugar")
+        ]
+
+        self.respuestas = {}
+        for i, (pregunta, opciones, correcta) in enumerate(preguntas):
+            bloque = tk.Frame(self.frame, bg=PALETA["bg"])
+            bloque.pack(pady=8, anchor="w", padx=24, fill="x")
+            tk.Label(bloque, text=pregunta, font=("Helvetica", 13, "bold"),
+                     bg=PALETA["bg"], fg=PALETA["acento"]).pack(anchor="w")
+            var = tk.StringVar()
+            self.respuestas[i] = (var, correcta)
+            fila = tk.Frame(bloque, bg=PALETA["bg"])
+            fila.pack(anchor="w")
+            for opcion in opciones:
+                tk.Radiobutton(
+                    fila, text=opcion, variable=var, value=opcion,
+                    font=("Helvetica", 12), bg=PALETA["bg"], activebackground=PALETA["panel"]
+                ).pack(side="left", padx=10)
+
+        self.resultado = self.estilo_label("", 12, False, "#b00020")
+        self.resultado.pack(pady=10)
+        self.estilo_boton("Enviar respuestas", self.verificar_quiz).pack()
+
+    def verificar_quiz(self):
+        score = sum(1 for var, correcta in self.respuestas.values() if var.get() == correcta)
+        if score == 3:
+            self.resultado.config(text="✅ ¡Perfecto! Avanza cuando quieras.", fg="green")
+            self.estilo_boton("Siguiente ➡️", self.juego2).pack(pady=10)
+        else:
+            self.resultado.config(text=f"❌ Fallaste ({score}/3). Intenta de nuevo.", fg="#b00020")
+
+    # --- Juego 2: Atrapa corazones ---
+    def juego2(self):
+        self.limpiar()
+        self.titulo("🎮 Juego 2: Atrapa corazones ❤️").pack(pady=4)
+
+        self.canvas = tk.Canvas(self.frame, width=480, height=360,
+                                bg=PALETA["panel"], highlightthickness=0)
+        self.canvas.pack(pady=10)
+
+        self.caught = 0
+        self.target = 7
+        self.contador = self.subtitulo(f"Corazones atrapados: {self.caught}/{self.target}")
+        self.contador.pack()
+
+        contenedor_boton = tk.Frame(self.frame, bg=PALETA["bg"])
+        contenedor_boton.pack(pady=10)
+        self.estilo_boton("Iniciar ➡️", self.iniciar_corazones).pack(in_=contenedor_boton, side="left", padx=6)
+        self.btn_detener = self.estilo_boton("Detener ⏸️", self.detener_corazones, color="#9c36b5")
+        self.btn_detener.config(state="disabled")
+        self.btn_detener.pack(in_=contenedor_boton, side="left", padx=6)
+
+        self.next_btn_rendered = False
+
+    def iniciar_corazones(self):
+        self.spawn_running = True
+        self.btn_detener.config(state="normal")
+        self.spawner()
+
+    def detener_corazones(self):
+        self.spawn_running = False
+        self.btn_detener.config(state="disabled")
+
+    def spawner(self):
+        if not self.spawn_running:
+            return
+        if self.caught >= self.target:
+            if not self.next_btn_rendered:
+                self.estilo_boton("Siguiente ➡️", self.juego3).pack(pady=10)
+                self.next_btn_rendered = True
+            return
+
+        x = random.randint(30, 450)
+        y = random.randint(60, 340)
+        size = random.choice([18, 20, 22, 24])
+        heart = self.canvas.create_text(x, y, text="❤️", font=("Helvetica", size))
+        self.canvas.tag_bind(heart, "<Button-1>", lambda e, h=heart: self.catch_heart(h))
+
+        self.spawn_after_id = self.root.after(800, self.spawner)
+
+    def catch_heart(self, heart):
+        try:
+            self.canvas.itemconfig(heart, text="💖")
+            self.root.after(200, lambda: self.canvas.delete(heart))
+        except Exception:
+            pass
+        self.caught += 1
+        self.contador.config(text=f"Corazones atrapados: {self.caught}/{self.target}")
+        if self.caught >= self.target and not self.next_btn_rendered:
+            self.estilo_boton("Siguiente ➡️", self.juego3).pack(pady=10)
+            self.next_btn_rendered = True
+
+    # --- Juego 3: Adivinanza ---
+    def juego3(self):
+        self.limpiar()
+        self.titulo("🎮 Juego 3: Adivinanza").pack(pady=10)
+
+        texto_adivinanza = (
+            "Viajo entre estrellas, un niño de cabellos dorados,\n"
+            "busco la amistad, a mis amigos he domesticado.\n"
+            "Lo importante no se ve, se siente con el alma,\n"
+            "¿Quién soy, que te enseño el amor sin calma?"
+        )
+        tk.Message(self.frame, text=texto_adivinanza, width=540,
+                   font=("Helvetica", 13, "italic"),
+                   bg=PALETA["bg"], fg=PALETA["acento"], justify="left").pack(pady=10)
+
+        self.entry = tk.Entry(self.frame, font=("Helvetica", 12))
+        self.entry.pack(pady=6)
+
+        self.riddle_result = self.estilo_label("", 12, False, "#b00020")
+        self.riddle_result.pack(pady=6)
+        self.estilo_boton("Responder", self.verificar_riddle).pack()
+
+    def verificar_riddle(self):
+        if self.entry.get().strip().lower() == "el principito":
+            self.riddle_result.config(text="✅ ¡Correcto!", fg="green")
+            self.estilo_boton("Siguiente ➡️", self.juego4).pack(pady=10)
+        else:
+            self.riddle_result.config(text="❌ No es correcto. Pista: El Principito", fg="#b00020")
+
+    # --- Juego 4: Memoria de parejas ---
+    def juego4(self):
+        self.limpiar()
+        self.titulo("🎮 Juego 4: Memoria de corazones").pack(pady=10)
+
+        self.buttons = []
+        self.values = ["❤️", "❤️", "💖", "💖", "💕", "💕"]
+        random.shuffle(self.values)
+        self.selected = []
+        self.matched = 0
+
+        grid = tk.Frame(self.frame, bg=PALETA["bg"])
+        grid.pack(pady=6)
+        for i in range(6):
+            b = tk.Button(grid, text="❓", width=6, height=3, font=("Helvetica", 14),
+                          command=lambda i=i: self.reveal(i), bg="#ffb3c6")
+            b.grid(row=i // 3, column=i % 3, padx=8, pady=8)
+            self.buttons.append(b)
+
+        self.mem_info = self.subtitulo("Encuentra las 3 parejas")
+        self.mem_info.pack(pady=8)
+
+    def reveal(self, i):
+        if i in self.selected or self.buttons[i]["text"] != "❓":
+            return
+        self.buttons[i].config(text=self.values[i])
+        self.selected.append(i)
+
+        if len(self.selected) == 2:
+            a, b = self.selected
+            if self.values[a] == self.values[b]:
+                self.matched += 1
+                self.selected = []
+                self.mem_info.config(text=f"Parejas encontradas: {self.matched}/3")
+                if self.matched == 3:
+                    self.estilo_boton("Siguiente ➡️", self.juego5).pack(pady=10)
+            else:
+                def hide_pair(x=a, y=b):
+                    self.buttons[x].config(text="❓")
+                    self.buttons[y].config(text="❓")
+                    self.selected = []
+                self.root.after(800, hide_pair)
+
+    # --- Juego 5: Trivia de Fútbol personalizada (con Siguiente) ---
+    def juego5(self):
+        self.limpiar()
+        self.titulo("🎮 Juego 5: Trivia de Fútbol").pack(pady=10)
+
+        preguntas = [
+            ("¿Qué selección ganó el Mundial de 2014?", ["Alemania", "Brasil", "Argentina"], "Alemania"),
+            ("¿Quién salió como mejor jugador de Chile en 2025?",
+             ["Alexis Sánchez", "Arturo Vidal", "Charles Aránguiz"], None),  # sin correcta
+            ("¿Cuántos jugadores tiene un equipo en cancha?", ["9", "10", "11"], "11")
+        ]
+
+        self.trivia_respuestas = {}
+        self.trivia_correctas = {}
+        for i, (pregunta, opciones, correcta) in enumerate(preguntas):
+            bloque = tk.Frame(self.frame, bg=PALETA["bg"])
+            bloque.pack(pady=8, anchor="w", padx=24, fill="x")
+
+            tk.Label(bloque, text=pregunta, font=("Helvetica", 13, "bold"),
+                     bg=PALETA["bg"], fg=PALETA["acento"]).pack(anchor="w")
+
+            var = tk.StringVar()
+            self.trivia_respuestas[i] = var
+            self.trivia_correctas[i] = correcta
+
+            fila = tk.Frame(bloque, bg=PALETA["bg"])
+            fila.pack(anchor="w")
+            for opcion in opciones:
+                tk.Radiobutton(
+                    fila, text=opcion, variable=var, value=opcion,
+                    font=("Helvetica", 12), bg=PALETA["bg"], activebackground=PALETA["panel"]
+                ).pack(side="left", padx=10)
+
+        self.trivia_resultado = self.estilo_label("", 12, False, PALETA["acento"])
+        self.trivia_resultado.pack(pady=10)
+        self.btn_siguiente = None
+        self.estilo_boton("Enviar respuestas", self.check_trivia).pack()
+
+    def check_trivia(self):
+        total = len(self.trivia_respuestas)
+        score = 0
+        for i, var in self.trivia_respuestas.items():
+            correcta = self.trivia_correctas[i]
+            if correcta is not None and var.get() == correcta:
+                score += 1
+
+        # Nota especial fija (respetando tu texto personalizado)
+        mensaje_nota = (
+            "⭐ Nota especial: El mejor futbolista de este año serías tú Kevin Encina,\n"
+            "porque lamentablemente no te conocí antes :3,\n"
+            "pero desde ahora lo eres y en adelante lo serás a no ser que te alejes de mí,\n"
+            "ahí dejarás de serlo, pero como no pasará, no hay por qué pensar en eso :b."
+        )
+        self.trivia_resultado.config(text=mensaje_nota, fg=PALETA["acento"])
+
+        # Mostrar botón Siguiente solo si las otras dos (válidas) están correctas
+        if score == total - 1:
+            if self.btn_siguiente is None or not self.btn_siguiente.winfo_exists():
+                self.btn_siguiente = self.estilo_boton("Siguiente ➡️", self.juego6)
+                self.btn_siguiente.pack(pady=10)
+        else:
+            self.trivia_resultado.config(
+                text=(
+                    f"❌ Fallaste ({score}/{total - 1} válidas). Corrige las otras preguntas.\n\n" +
+                    mensaje_nota
+                ),
+                fg="#b00020"
+            )
+            if self.btn_siguiente is not None and self.btn_siguiente.winfo_exists():
+                self.btn_siguiente.destroy()
+                self.btn_siguiente = None
+
+    # --- Juego 6: Adivina el número ---
+    def juego6(self):
+        self.limpiar()
+        self.titulo("🎮 Juego 6: Adivina el número").pack(pady=10)
+
+        self.secret = random.randint(1, 10)
+        self.subtitulo("He pensado un número entre 1 y 10").pack()
+
+        caja = tk.Frame(self.frame, bg=PALETA["bg"])
+        caja.pack(pady=8)
+        self.entry_num = tk.Entry(caja, font=("Helvetica", 12), width=8)
+        self.entry_num.pack(side="left", padx=6)
+        self.estilo_boton("Probar", self.check_number).pack(in_=caja, side="left", padx=6)
+
+        self.num_result = self.estilo_label("", 12, False, PALETA["texto"])
+        self.num_result.pack(pady=8)
+
+        self.intentos = 5
+        self.info_intentos = self.subtitulo(f"Intentos restantes: {self.intentos}")
+        self.info_intentos.pack()
+
+    def check_number(self):
+        txt = self.entry_num.get().strip()
+        try:
+            guess = int(txt)
+        except ValueError:
+            self.num_result.config(text="❌ Ingresa un número válido (1–10)", fg="#b00020")
+            return
+        if not (1 <= guess <= 10):
+            self.num_result.config(text="❌ Debe estar entre 1 y 10", fg="#b00020")
+            return
+
+        if guess == self.secret:
+            self.carta()
+            return
+
+        self.intentos -= 1
+        if self.intentos <= 0:
+            self.num_result.config(text=f"Fin: era {self.secret}. Volvemos al Quiz.", fg="#b00020")
+            self.root.after(1200, self.juego1)
+            return
+
+        if guess < self.secret:
+            self.num_result.config(text="El número es más alto ⬆️", fg=PALETA["acento"])
+        else:
+            self.num_result.config(text="El número es más bajo ⬇️", fg=PALETA["acento"])
+        self.info_intentos.config(text=f"Intentos restantes: {self.intentos}")
+
+    # --- Carta final ---
+    def carta(self):
+        self.limpiar()
+        self.titulo("💌 Carta desbloqueada 💌").pack(pady=10)
+
+        texto = (
+            "Gracias por jugar y llegar hasta aquí.\n"
+            "Cada corazón atrapado es un recuerdo, pude poner más de 7 pero seguirías atrapando corazones ya que son tantos.\n"
+            "Pero bueno, te dejo esta pequeña carta virtual como fin de este código, es muy simple y sincera:\n"
+            "Me importas, me inspiras y me haces querer ser mejor y no solo eso, de verdad me haces sentir tanto,\n"
+            "que llega a darme miedo porque ahora que te conocí no quiero perderte nunca.\n"
+            "Muchas gracias por tus detalles, de verdad los valoro un montón y me hacen muy feliz.\n"
+            "Espero que este pequeño detalle también te haga feliz como tú lo haces conmigo.\n\n"
+            "Byebye con cariño,\nScarlett ❤️\n\n"
+        )
+        tk.Message(self.frame, text=texto, width=560, font=("Helvetica", 12),
+                bg=PALETA["bg"], justify="left", fg=PALETA["texto"]).pack(pady=20)
+
+        canvas = tk.Canvas(self.frame, width=520, height=320, bg=PALETA["bg"], highlightthickness=0)
+        canvas.pack()
+        self.animar_corazones(canvas)
+
+        btns = tk.Frame(self.frame, bg=PALETA["bg"])
+        btns.pack(pady=10)
+        self.estilo_boton("Volver al inicio", self.juego1).pack(in_=btns, side="left", padx=6)
+
+    def animar_corazones(self, canvas):
+        x = random.randint(20, 500)
+        size = random.choice([16, 18, 20, 22, 24])
+        heart = canvas.create_text(x, 320, text="❤️", font=("Helvetica", size))
+        def mover():
+            try:
+                canvas.move(heart, 0, -3)
+                y = canvas.coords(heart)[1]
+                if y > 0:
+                    self.root.after(25, mover)
+                else:
+                    canvas.delete(heart)
+            except Exception:
+                pass
+        mover()
+        self.root.after(360, lambda: self.animar_corazones(canvas))
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    RutaCarta(root)
+    root.mainloop()
 
