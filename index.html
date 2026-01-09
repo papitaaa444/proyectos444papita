@@ -7,7 +7,7 @@
   <style>
     :root {
       --rosa:#FF69B4; --rosa-claro:#FFB6C1; --magenta:#DB7093; --bg:#FFF0F5;
-      --oscuro:#0b132b; --azul:#00d4ff; --verde:#1DB954; --gris:#1a1a1a; --oro:#FFD700;
+      --oscuro:#0b132b; --azul:#00d4ff; --verde:#1DB954; --gris:#121212; --oro:#FFD700;
     }
     * { box-sizing: border-box; }
     body { margin:0; font-family: Georgia, serif; background: var(--bg); color:#333; }
@@ -19,6 +19,7 @@
     .btn-azul { background: var(--azul); color:black; }
     canvas { border:2px solid #ffc0cb; background:transparent; border-radius:8px; }
     input { padding:10px; font-size:16px; border:2px solid #eee; border-radius:8px; text-align:center; }
+
     #juego3 { background: var(--oscuro); color:white; }
     #juego4 { background:#0d1b2a; color:white; }
     #juego5 { background:#FFF5EE; }
@@ -113,18 +114,18 @@
 <!-- Juego 8: Completar letra -->
 <section id="juego8" class="pantalla">
   <h2>🎤 Completa la letra 🎤</h2>
-  <p id="tituloLetra"></p>
-  <p id="fraseLetra"></p>
+  <p id="tituloLetra" style="font-style:italic; color:#cccccc"></p>
+  <p id="fraseLetra" style="font-weight:bold"></p>
   <div id="opcionesLetra"></div>
 </section>
 
 <!-- Juego 9: Adivina artista -->
 <section id="juego9" class="pantalla">
   <h2>🕵️ Adivina el Artista por Emojis</h2>
-  <p id="emojiArtista"></p>
+  <p id="emojiArtista" style="font-size:40px;"></p>
   <input id="entradaArtista" type="text" placeholder="Escribe tu respuesta..." />
   <button class="btn btn-verde" onclick="verificarArtista()">Comprobar</button>
-  <p id="errorArtista"></p>
+  <p id="errorArtista" style="color:red;"></p>
 </section>
 
 <!-- Juego 10: Fuegos -->
@@ -159,12 +160,11 @@
 </section>
 
 <script>
-// Navegación
+// Navegación — disponible desde el inicio
 function mostrar(id){
   document.querySelectorAll('.pantalla').forEach(p=>p.style.display='none');
   const el = document.getElementById(id);
-  el.style.display='block';
-  const focusInput = el.querySelector('input'); if (focusInput) focusInput.focus();
+  if(el) el.style.display='block';
 }
 
 // Botones de siguiente en Juego 1
@@ -172,11 +172,11 @@ function pasarRonda(n){
   const r1 = document.getElementById("ronda1");
   const r2 = document.getElementById("ronda2");
   const r3 = document.getElementById("ronda3");
-  if(n===1){ r1.style.display="none"; r2.style.display="block"; drawR2(); startTimerR2(); }
-  if(n===2){ r2.style.display="none"; r3.style.display="block"; iniciarRonda3(); }
+  if(n===1 && r1 && r2){ r1.style.display="none"; r2.style.display="block"; drawR2(); startTimerR2(); }
+  if(n===2 && r2 && r3){ r2.style.display="none"; r3.style.display="block"; iniciarRonda3(); }
 }
 
-// Juego 1: Rondas 1 y 2 (contador opcional)
+// Juego 1: Rondas 1 y 2
 const c1 = document.getElementById("canvasR1"), r1ctx = c1.getContext("2d");
 let heart1 = {x:300,y:140,emoji:"❤️"}, t1Interval = null;
 function drawR1(){ r1ctx.clearRect(0,0,c1.width,c1.height); r1ctx.font="52px Arial"; r1ctx.fillText(heart1.emoji, heart1.x, heart1.y); }
@@ -221,7 +221,8 @@ function iniciarRonda3(){
 
 // Arranque al entrar a juego1
 const obsJ1 = new MutationObserver(()=>{
-  if(document.getElementById("juego1").style.display==="block"){
+  const j1 = document.getElementById("juego1");
+  if(j1 && j1.style.display==="block"){
     document.getElementById("ronda1").style.display="block";
     document.getElementById("ronda2").style.display="none";
     document.getElementById("ronda3").style.display="none";
@@ -599,7 +600,7 @@ obsJ1.observe(document.body,{attributes:true, subtree:true, attributeFilter:["st
     }
     ticker = requestAnimationFrame(loop);
   }
-  function start(){ hearts=[]; for(let i=0;i<28)i++){ newHeart(); } loop(); spawnInt = setInterval(newHeart,1200); }
+  function start(){ hearts=[]; for(let i=0;i<28;i++) newHeart(); loop(); spawnInt = setInterval(newHeart,1200); }
   function stop(){ cancelAnimationFrame(ticker); clearInterval(spawnInt); }
   window.finalizarCarta = ()=>{
     stop();
@@ -616,6 +617,7 @@ obsJ1.observe(document.body,{attributes:true, subtree:true, attributeFilter:["st
 </script>
 </body>
 </html>
+
 
 
 
