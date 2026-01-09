@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title> papitaweb 🌸</title>
+  <title>Con amor para ti 🌸</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -38,6 +38,7 @@
   <button class="btn btn-rosa" onclick="mostrar('juego1')">Comenzar Viaje ✨</button>
 </section>
 
+<!-- Juego 1: Rondas -->
 <section id="juego1" class="pantalla">
   <h2 style="color:#CD5C5C">💖 Primer Reto: Afecto</h2>
 
@@ -59,29 +60,19 @@
     <h3>Busca 5 corazones rosados 💗</h3>
     <canvas id="canvasCorazones" width="600" height="350"></canvas>
     <p id="puntos">Puntos: 0/5</p>
-    <button id="btnNext1" class="btn btn-primario" style="display:none;" onclick="mostrar('juego2')">Siguiente ➡️</button>
+    <div style="display:flex; justify-content:center; gap:8px;">
+      <button id="btnNext1" class="btn btn-primario" style="display:none;" onclick="mostrar('juego2')">Siguiente ➡️</button>
+      <button class="btn btn-rosa" onclick="mostrar('juego2')">Siguiente (manual) ➡️</button>
+    </div>
   </div>
 </section>
-
-<script>
-function pasarRonda(n){
-  if(n===1){
-    document.getElementById("ronda1").style.display="none";
-    document.getElementById("ronda2").style.display="block";
-  }
-  if(n===2){
-    document.getElementById("ronda2").style.display="none";
-    document.getElementById("ronda3").style.display="block";
-  }
-}
-</script>
 
 <!-- Juego 2: Colores -->
 <section id="juego2" class="pantalla">
   <h2 style="color:var(--magenta)">🎨 Encuentra el color oculto</h2>
   <p id="intentos">Te quedan 3 intentos</p>
   <div id="opciones"></div>
-  <p id="mensaje" style="color:#F08080"></p>
+  <p id="mensaje"></p>
 </section>
 
 <!-- Juego 3: Principito -->
@@ -122,18 +113,18 @@ function pasarRonda(n){
 <!-- Juego 8: Completar letra -->
 <section id="juego8" class="pantalla">
   <h2>🎤 Completa la letra 🎤</h2>
-  <p id="tituloLetra" style="font-style:italic; color:#cccccc"></p>
-  <p id="fraseLetra" style="font-weight:bold"></p>
+  <p id="tituloLetra"></p>
+  <p id="fraseLetra"></p>
   <div id="opcionesLetra"></div>
 </section>
 
 <!-- Juego 9: Adivina artista -->
 <section id="juego9" class="pantalla">
   <h2>🕵️ Adivina el Artista por Emojis</h2>
-  <p id="emojiArtista" style="font-size:40px;"></p>
+  <p id="emojiArtista"></p>
   <input id="entradaArtista" type="text" placeholder="Escribe tu respuesta..." />
   <button class="btn btn-verde" onclick="verificarArtista()">Comprobar</button>
-  <p id="errorArtista" style="color:red;"></p>
+  <p id="errorArtista"></p>
 </section>
 
 <!-- Juego 10: Fuegos -->
@@ -171,74 +162,38 @@ function pasarRonda(n){
 // Navegación
 function mostrar(id){
   document.querySelectorAll('.pantalla').forEach(p=>p.style.display='none');
-  document.getElementById(id).style.display='block';
-  const input = document.querySelector(`#${id} input`); if (input) input.focus();
+  const el = document.getElementById(id);
+  el.style.display='block';
+  const focusInput = el.querySelector('input'); if (focusInput) focusInput.focus();
 }
 
 // Botones de siguiente en Juego 1
 function pasarRonda(n){
-  if(n===1){
-    document.getElementById("ronda1").style.display="none";
-    document.getElementById("ronda2").style.display="block";
-  }
-  if(n===2){
-    document.getElementById("ronda2").style.display="none";
-    document.getElementById("ronda3").style.display="block";
-    // Al entrar a ronda 3, iniciamos el spawn de corazones si no estaba
-    iniciarRonda3();
-  }
+  const r1 = document.getElementById("ronda1");
+  const r2 = document.getElementById("ronda2");
+  const r3 = document.getElementById("ronda3");
+  if(n===1){ r1.style.display="none"; r2.style.display="block"; drawR2(); startTimerR2(); }
+  if(n===2){ r2.style.display="none"; r3.style.display="block"; iniciarRonda3(); }
 }
 
-// Juego 1: Ronda 1 y 2 (con contador estable, pero opcional gracias al botón)
-(function(){
-  // Ronda 1
-  const c1 = document.getElementById("canvasR1"), r1 = c1.getContext("2d");
-  let heart1 = {x:300,y:140,emoji:"❤️"}, t1Interval;
-  function drawR1(){ r1.clearRect(0,0,c1.width,c1.height); r1.font="52px Arial"; r1.fillText(heart1.emoji, heart1.x, heart1.y); }
-  function moveRandom1(){ heart1.x=Math.random()*520+40; heart1.y=Math.random()*180+40; drawR1(); }
-  c1.addEventListener("mousemove",(e)=>{const rect=c1.getBoundingClientRect();const x=e.clientX-rect.left,y=e.clientY-rect.top;if(Math.hypot(x-heart1.x,y-heart1.y)<45) moveRandom1();});
-  function startTimerR1(){
-    let t=5; document.getElementById("timerR1").innerText=`⏳ ${t}s`; clearInterval(t1Interval);
-    t1Interval=setInterval(()=>{ t--; document.getElementById("timerR1").innerText=`⏳ ${t}s`; if(t<=0){ clearInterval(t1Interval); } },1000);
-  }
+// Juego 1: Rondas 1 y 2 (contador opcional)
+const c1 = document.getElementById("canvasR1"), r1ctx = c1.getContext("2d");
+let heart1 = {x:300,y:140,emoji:"❤️"}, t1Interval = null;
+function drawR1(){ r1ctx.clearRect(0,0,c1.width,c1.height); r1ctx.font="52px Arial"; r1ctx.fillText(heart1.emoji, heart1.x, heart1.y); }
+function moveRandom1(){ heart1.x=Math.random()*520+40; heart1.y=Math.random()*180+40; drawR1(); }
+c1.addEventListener("mousemove",(e)=>{const rect=c1.getBoundingClientRect();const x=e.clientX-rect.left,y=e.clientY-rect.top;if(Math.hypot(x-heart1.x,y-heart1.y)<45) moveRandom1();});
+function startTimerR1(){ let t=5; document.getElementById("timerR1").innerText=`⏳ ${t}s`; clearInterval(t1Interval); t1Interval=setInterval(()=>{ t--; document.getElementById("timerR1").innerText=`⏳ ${t}s`; if(t<=0){ clearInterval(t1Interval); } },1000); }
 
-  // Ronda 2
-  const c2 = document.getElementById("canvasR2"), r2 = c2.getContext("2d");
-  let heart2 = {x:300,y:140,emoji:"💜"}, t2Interval;
-  function drawR2(){ r2.clearRect(0,0,c2.width,c2.height); r2.font="52px Arial"; r2.fillText(heart2.emoji, heart2.x, heart2.y); }
-  function moveRandom2(){ heart2.x=Math.random()*520+40; heart2.y=Math.random()*180+40; drawR2(); }
-  c2.addEventListener("mousemove",(e)=>{const rect=c2.getBoundingClientRect();const x=e.clientX-rect.left,y=e.clientY-rect.top;if(Math.hypot(x-heart2.x,y-heart2.y)<45) moveRandom2();});
-  function startTimerR2(){
-    let t=5; document.getElementById("timerR2").innerText=`⏳ ${t}s`; clearInterval(t2Interval);
-    t2Interval=setInterval(()=>{ t--; document.getElementById("timerR2").innerText=`⏳ ${t}s`; if(t<=0){ clearInterval(t2Interval); } },1000);
-  }
-
-  // Arranque al entrar al juego 1
-  const obs = new MutationObserver(()=>{
-    if(document.getElementById("juego1").style.display==="block"){
-      // Reset de rondas
-      document.getElementById("ronda1").style.display="block";
-      document.getElementById("ronda2").style.display="none";
-      document.getElementById("ronda3").style.display="none";
-      // Dibujo inicial y contador opcional
-      drawR1(); startTimerR1();
-    }
-  });
-  obs.observe(document.body,{attributes:true, subtree:true, attributeFilter:["style"]});
-
-  // Exponer iniciarRonda3 para el botón
-  window.iniciarRonda3 = function(){
-    drawR2(); startTimerR2();
-    // Prepara estado de ronda 3
-    puntos = 0; arr = []; document.getElementById("puntos").innerText = "Puntos: 0/5";
-    document.getElementById("btnNext1").style.display="none";
-    drawR3(); spawnR3();
-  };
-})();
+const c2 = document.getElementById("canvasR2"), r2ctx = c2.getContext("2d");
+let heart2 = {x:300,y:140,emoji:"💜"}, t2Interval = null;
+function drawR2(){ r2ctx.clearRect(0,0,c2.width,c2.height); r2ctx.font="52px Arial"; r2ctx.fillText(heart2.emoji, heart2.x, heart2.y); }
+function moveRandom2(){ heart2.x=Math.random()*520+40; heart2.y=Math.random()*180+40; drawR2(); }
+c2.addEventListener("mousemove",(e)=>{const rect=c2.getBoundingClientRect();const x=e.clientX-rect.left,y=e.clientY-rect.top;if(Math.hypot(x-heart2.x,y-heart2.y)<45) moveRandom2();});
+function startTimerR2(){ let t=5; document.getElementById("timerR2").innerText=`⏳ ${t}s`; clearInterval(t2Interval); t2Interval=setInterval(()=>{ t--; document.getElementById("timerR2").innerText=`⏳ ${t}s`; if(t<=0){ clearInterval(t2Interval); } },1000); }
 
 // Juego 1: Ronda 3 (atrapa 5 💗)
 const c3 = document.getElementById("canvasCorazones"), ctx3 = c3.getContext("2d");
-let puntos=0, arr=[], spawnTimeout;
+let puntos=0, arr=[], spawnTimeout=null;
 function drawR3(){ ctx3.clearRect(0,0,c3.width,c3.height); ctx3.font="36px Arial"; arr.forEach(c=>ctx3.fillText(c.t,c.x,c.y)); }
 function spawnR3(){
   if(puntos>=5) return;
@@ -259,6 +214,21 @@ c3.addEventListener("click",(e)=>{
     } else { arr.splice(closest,1); drawR3(); }
   }
 });
+function iniciarRonda3(){
+  puntos=0; arr=[]; document.getElementById("btnNext1").style.display="none"; document.getElementById("puntos").innerText="Puntos: 0/5";
+  drawR3(); clearTimeout(spawnTimeout); spawnR3();
+}
+
+// Arranque al entrar a juego1
+const obsJ1 = new MutationObserver(()=>{
+  if(document.getElementById("juego1").style.display==="block"){
+    document.getElementById("ronda1").style.display="block";
+    document.getElementById("ronda2").style.display="none";
+    document.getElementById("ronda3").style.display="none";
+    drawR1(); startTimerR1();
+  }
+});
+obsJ1.observe(document.body,{attributes:true, subtree:true, attributeFilter:["style"]});
 
 // Juego 2: Colores
 (function(){
@@ -441,25 +411,22 @@ c3.addEventListener("click",(e)=>{
   const paleta=["#FFB6C1","#DB7093","#FF69B4","#FF1493","#FFC0CB"];
 
   function drawTulip(x,y,scale=1){
-    // Tallo
     ctx.strokeStyle="#5FA66B"; ctx.lineWidth=3;
     ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y+100*scale); ctx.stroke();
-    // Hojas
     ctx.fillStyle="#6FBF73";
     ctx.beginPath(); ctx.ellipse(x-12, y+60, 20, 8, Math.PI/6, 0, Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.ellipse(x+12, y+70, 20, 8, -Math.PI/6, 0, Math.PI*2); ctx.fill();
-    // Flor con pétalos definidos
     const c = paleta[(Math.random()*paleta.length)|0];
     ctx.fillStyle = c;
-    // Central
+    // central
     ctx.beginPath(); ctx.moveTo(x, y);
     ctx.quadraticCurveTo(x-10*scale, y-30*scale, x, y-50*scale);
     ctx.quadraticCurveTo(x+10*scale, y-30*scale, x, y); ctx.fill();
-    // Izquierdo
+    // izquierdo
     ctx.beginPath(); ctx.moveTo(x, y);
     ctx.quadraticCurveTo(x-25*scale, y-25*scale, x-10*scale, y-50*scale);
     ctx.quadraticCurveTo(x-5*scale, y-25*scale, x, y); ctx.fill();
-    // Derecho
+    // derecho
     ctx.beginPath(); ctx.moveTo(x, y);
     ctx.quadraticCurveTo(x+25*scale, y-25*scale, x+10*scale, y-50*scale);
     ctx.quadraticCurveTo(x+5*scale, y-25*scale, x, y); ctx.fill();
@@ -468,7 +435,6 @@ c3.addEventListener("click",(e)=>{
   function escena(){
     ctx.clearRect(0,0,800,650);
     ctx.fillStyle="#FFF9FB"; ctx.fillRect(0,0,800,650);
-    // Lluvia sutil y brillos
     for(let i=0;i<40;i++){
       ctx.strokeStyle = "rgba(255,182,193,0.35)";
       ctx.beginPath();
@@ -477,10 +443,8 @@ c3.addEventListener("click",(e)=>{
       ctx.fillStyle = "rgba(255,215,0,0.6)";
       ctx.font = "12px Arial"; ctx.fillText("✦", lx+Math.random()*6, ly+Math.random()*6);
     }
-    // Texto
     ctx.fillStyle="#DB7093"; ctx.font="30px Georgia"; ctx.fillText("Para mi lugar seguro...",280,90);
     ctx.fillStyle="#BC8F8F"; ctx.font="16px Arial"; ctx.fillText("Eres lo más bonito de mi vida.",300,130);
-    // Tulipanes
     for(let i=0;i<25;i++){ drawTulip(Math.random()*700+50, Math.random()*140+420, 1+Math.random()*0.3); }
   }
 
@@ -557,7 +521,7 @@ c3.addEventListener("click",(e)=>{
   const retos = [
     {emoji:"☀️ 🇲🇽 🎙️", c:"Luis Miguel"},
     {emoji:"🌙 🎤 👱🏻‍♀️ 💅", c:"Ariana Grande"},
-    {emoji:"🐰 🎤 🔫 🔥", c:"bad bunny"}
+    {emoji:"🎸 🎩 🔫 🌹", c:"Guns N' Roses"}
   ]; let idx=0;
   function render(){
     if(idx>=retos.length){
@@ -613,7 +577,7 @@ c3.addEventListener("click",(e)=>{
   obs.observe(document.body,{attributes:true, subtree:true, attributeFilter:["style"]});
 })();
 
-// Carta Final: corazones flotantes y cierre
+// Carta Final
 (function(){
   const canvas = document.getElementById("canvasCarta");
   const ctx = canvas.getContext("2d");
@@ -635,7 +599,7 @@ c3.addEventListener("click",(e)=>{
     }
     ticker = requestAnimationFrame(loop);
   }
-  function start(){ hearts=[]; for(let i=0;i<28;i++) newHeart(); loop(); spawnInt = setInterval(newHeart,1200); }
+  function start(){ hearts=[]; for(let i=0;i<28)i++){ newHeart(); } loop(); spawnInt = setInterval(newHeart,1200); }
   function stop(){ cancelAnimationFrame(ticker); clearInterval(spawnInt); }
   window.finalizarCarta = ()=>{
     stop();
@@ -652,6 +616,7 @@ c3.addEventListener("click",(e)=>{
 </script>
 </body>
 </html>
+
 
 
 
