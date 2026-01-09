@@ -46,7 +46,7 @@
     <button class="btn btn-rosa" onclick="pasarRonda(1)">Siguiente ➡️</button>
   </div>
   <div id="ronda2" style="display:none;">
-    <h3>Ronda 2: Un abrazao 💜</h3>
+    <h3>Ronda 2: Un abrazo 💜</h3>
     <canvas id="canvasR2" width="600" height="260"></canvas>
     <button class="btn btn-rosa" onclick="pasarRonda(2)">Siguiente ➡️</button>
   </div>
@@ -87,7 +87,7 @@
 <section id="juego6" class="pantalla">
   <h2>🌸 Jardín Final 🌸</h2>
   <canvas id="canvasJardin" width="800" height="650"></canvas>
-  <button class="btn btn-primario" onclick="mostrar('juego7')">Siguiente ➡️</button>
+  <button class="btn btn-primario" onclick="mostrar('juego7')">Continuar ➡️</button>
 </section>
 
 <section id="juego7" class="pantalla">
@@ -122,88 +122,190 @@
   <div style="position:relative; max-width:860px; margin:0 auto;">
     <canvas id="canvasCarta" width="820" height="520" style="background:#FFFAF0; border:none; border-radius:12px;"></canvas>
     <div style="position:absolute; left:50%; top:50%; transform:translate(-50%, -50%); width:620px; max-width:92%; background:#FFEFF4; border:2px solid #FFC0CB; border-radius:12px; box-shadow:0 10px 25px rgba(219,112,147,0.25); color:#505050; text-align:center; padding:22px;">
-      <h3 style="margin:0 0 12px; color:#DB7093;">Mi carta especial...</h3>
-      <div style="font-family:Verdana; font-size:14px; line-height:1.6; text-align:justify; max-height:280px; overflow:auto;">
-        Quizá te demuestro muy poco y quizá esto no sea nada o, si lo es, no sea suficiente...
-        [TU TEXTO COMPLETO AQUÍ]
+      <h3 style="margin:0 0 12px; color:#DB7093; font-family:Georgia, serif;">Mi carta especial...</h3>
+      <div style="font-family:Verdana, sans-serif; font-size:14px; line-height:1.6; text-align:justify; color:#505050; max-height:280px; overflow:auto;">
+        Quizá te demuestro muy poco y quizá esto no sea nada o, si lo es, no sea suficiente. No es que no quiera expresar o mostrar todo lo que siento.
+        Realmente, hay muchas cosas que siento y que quisiera expresar, pero creo que de verdad me quedo corta, jajaja, irónico ¿cierto?
+        Haciendo esto cayeron varias de mis lágrimas, no lo voy a negar. Muchas cosas me asustan y, entre esas, que me destrocen, porque una vez ya llegué a eso.
+        Al menos, si llego a caer ahí otra vez, que no sea por ti, por favor. Quiero algo bonito e igual siento que quizá si no funciona pueda ser porque soy yo el problema.
+        Siendo así, te pido disculpas, quizá por el miedo a llorar me limité a ciertas cosas. Bueno, pero quiero que sepas que hay muchos sentimientos,
+        muchas emociones que me haces sentir. Me haces feliz y quiero poder hacerte igual de feliz. Gracias por estar y por aguantarme.
+        Sé que me pongo tonta y sigo mejorando por ti para ser y poder entregarte lo mejor.
+        ¡Muakkkk!
       </div>
-      <button class="btn btn-primario" onclick="finalizarCarta()">Finalizar con un abrazo virtual 🤗</button>
+      <button class="btn btn-primario" style="margin-top:14px;" onclick="finalizarCarta()">Finalizar con un abrazo virtual 🤗</button>
     </div>
   </div>
 </section>
 
 <script>
-// Lógica de navegación
+// Navegación
 function mostrar(id){
   document.querySelectorAll('.pantalla').forEach(p=>p.style.display='none');
-  document.getElementById(id).style.display='block';
+  const el = document.getElementById(id);
+  if(el) el.style.display='block';
+  const focusInput = el.querySelector('input'); if (focusInput) focusInput.focus();
 }
 
 function pasarRonda(n){
-  if(n===1) { document.getElementById("ronda1").style.display="none"; document.getElementById("ronda2").style.display="block"; }
-  if(n===2) { document.getElementById("ronda2").style.display="none"; document.getElementById("ronda3").style.display="block"; }
+  if(n===1){ document.getElementById("ronda1").style.display="none"; document.getElementById("ronda2").style.display="block"; }
+  if(n===2){ document.getElementById("ronda2").style.display="none"; document.getElementById("ronda3").style.display="block"; }
 }
 
-// Juego 1 - Corazones Rosados (CORREGIDO PUNTOS)
+// Juego 1: Corazones
+const c1 = document.getElementById("canvasR1"), ctx1 = c1.getContext("2d");
+const c2 = document.getElementById("canvasR2"), ctx2 = c2.getContext("2d");
+let heart1={x:300,y:140,emoji:"❤️"}, heart2={x:300,y:140,emoji:"💜"};
+function drawR1(){ ctx1.clearRect(0,0,c1.width,c1.height); ctx1.font="52px Arial"; ctx1.fillText(heart1.emoji, heart1.x, heart1.y); }
+function drawR2(){ ctx2.clearRect(0,0,c2.width,c2.height); ctx2.font="52px Arial"; ctx2.fillText(heart2.emoji, heart2.x, heart2.y); }
+function moveRandom1(){ heart1.x=Math.random()*520+40; heart1.y=Math.random()*180+40; drawR1(); }
+function moveRandom2(){ heart2.x=Math.random()*520+40; heart2.y=Math.random()*180+40; drawR2(); }
+c1.addEventListener("mousemove",(e)=>{
+  const rect=c1.getBoundingClientRect(); const x=e.clientX-rect.left, y=e.clientY-rect.top;
+  if(Math.hypot(x-heart1.x,y-heart1.y)<45) moveRandom1();
+});
+c2.addEventListener("mousemove",(e)=>{
+  const rect=c2.getBoundingClientRect(); const x=e.clientX-rect.left, y=e.clientY-rect.top;
+  if(Math.hypot(x-heart2.x,y-heart2.y)<45) moveRandom2();
+});
+drawR1(); drawR2();
+
+// Ronda 3 (CORREGIDO)
 const c3 = document.getElementById("canvasCorazones"), ctx3 = c3.getContext("2d");
-let puntosJ1=0, arrJ1=[], spawnTimeout=null;
-function drawR3(){ ctx3.clearRect(0,0,c3.width,c3.height); ctx3.font="36px Arial"; arrJ1.forEach(c=>ctx3.fillText(c.t,c.x,c.y)); }
+let puntos=0, arr=[], spawnTimeout=null;
+function drawR3(){ ctx3.clearRect(0,0,600,350); ctx3.font="36px Arial"; arr.forEach(c=>ctx3.fillText(c.t,c.x,c.y)); }
 function spawnR3(){
-  if(puntosJ1>=5) return;
-  const x=Math.random()*560+20, y=Math.random()*320+20;
-  const tipos=["❤️","💜","💗","🌸","✨"];
-  arrJ1.push({x,y,t:tipos[Math.floor(Math.random()*tipos.length)]});
-  drawR3();
-  spawnTimeout = setTimeout(spawnR3, 600);
+  if(puntos>=5) return;
+  const x=Math.random()*560+20, y=Math.random()*320+20, tipos=["❤️","💜","💗","🌸","✨"];
+  arr.push({x,y,t:tipos[Math.floor(Math.random()*tipos.length)]});
+  drawR3(); spawnTimeout = setTimeout(spawnR3, 250);
 }
 c3.addEventListener("click",(e)=>{
   const rect=c3.getBoundingClientRect(); const x=e.clientX-rect.left, y=e.clientY-rect.top;
-  arrJ1.forEach((c,i)=>{
-    if(Math.hypot(x-c.x, y-c.y) < 40){
+  arr.forEach((c,i)=>{
+    if(Math.hypot(x-c.x,y-c.y)<40){
       if(c.t==="💗"){
-        puntosJ1++;
-        document.getElementById("puntos").innerText=`Puntos: ${puntosJ1}/5`;
-        if(puntosJ1>=5){ 
-            document.getElementById("btnNext1").style.display="inline-block"; 
-            clearTimeout(spawnTimeout);
-        }
+        puntos++; document.getElementById("puntos").innerText=`Puntos: ${puntos}/5`;
+        if(puntos>=5){ document.getElementById("btnNext1").style.display="inline-block"; clearTimeout(spawnTimeout); }
       }
-      arrJ1.splice(i,1); drawR3();
+      arr.splice(i,1); drawR3();
     }
   });
 });
+const obsJ1 = new MutationObserver(()=>{ if(document.getElementById("ronda3").style.display==="block") {puntos=0; arr=[]; spawnR3();} });
+obsJ1.observe(document.body,{attributes:true, subtree:true});
 
-// [TODAS LAS DEMÁS FUNCIONES DE TU ARCHIVO ORIGINAL SE MANTIENEN IGUAL]
-
-// CARTA FINAL (CORREGIDO ERROR DE SINTAXIS)
+// Juego 2: Colores
 (function(){
-  const canvas = document.getElementById("canvasCarta"), ctx = canvas.getContext("2d");
-  let hearts=[], ticker, spawnInt;
-  function newHeart(){ hearts.push({x:Math.random()*canvas.width, y:canvas.height+20, vx:Math.random()*2-1, vy:-(Math.random()*2+1), col:"#FFB6C1"}); }
-  function loop(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(let i=0; i<hearts.length; i++){
-        let h = hearts[i]; h.y += h.vy; ctx.fillText("💗", h.x, h.y);
+  const intentosLbl = document.getElementById("intentos"), opcionesDiv = document.getElementById("opciones"), msg = document.getElementById("mensaje");
+  let intentos = 3;
+  const opciones = [{n:"Azul", c:"#ADD8E6"}, {n:"Rojo", c:"#FFB2B2"}, {n:"Verde", c:"#C2F0C2"}, {n:"Amarillo", c:"#FFFFE0"}];
+  opcionesDiv.innerHTML = opciones.map(o => `<button class="btn" style="background:${o.c}; width:120px;" onclick="verificarColor('${o.n}')">${o.n}</button>`).join("");
+  window.verificarColor = (elegido) => {
+    intentos--;
+    if(intentos>0){ msg.innerText = "¿Seguro? 🤭"; intentosLbl.innerText = `Te quedan ${intentos} intentos`; }
+    else {
+      opcionesDiv.innerHTML = ""; intentosLbl.innerText = "¡Se acabaron los intentos! 🤭";
+      const btn = document.createElement("button"); btn.className="btn btn-rosa"; btn.textContent = "Tap aquí, era el color de fondo 🤡";
+      btn.onclick = () => { document.getElementById("juego2").innerHTML = `<h2 style="color:white; background:#FFC0CB; padding:50px; border-radius:12px;">¡Era ROSADO 💗!</h2><button class="btn btn-primario" onclick="mostrar('juego3')">Siguiente</button>`; };
+      opcionesDiv.appendChild(btn);
     }
-    ticker = requestAnimationFrame(loop);
-  }
-  // EL ERROR ESTABA AQUÍ ABAJO: i<28)i++ se cambió a i<28; i++
-  function start(){ hearts=[]; for(let i=0; i<28; i++){ newHeart(); } loop(); spawnInt = setInterval(newHeart,1200); }
-  
-  const obs = new MutationObserver(()=>{ if(document.getElementById("cartaFinal").style.display==="block") start(); });
-  obs.observe(document.body, {attributes:true, subtree:true});
-  
-  window.finalizarCarta = () => { location.reload(); };
+  };
 })();
 
-// [RESTO DE TU LÓGICA DE JUEGOS 2 AL 10 AQUÍ...]
+// Juego 3: Principito
+(function(){
+  const frases = [
+    {texto:"Lo esencial es invisible...", correcta:"a los ojos", opciones:["al corazón","a la mente","al alma"]},
+    {texto:"Fue el tiempo que pasaste con tu...", correcta:"rosa", opciones:["planeta","zorro","orgullo"]}
+  ];
+  let idx = 0;
+  function render(){
+    if(idx>=frases.length){ document.getElementById("juego3").innerHTML = `<h2>✨ ¡Sabias palabras! ✨</h2><button class="btn btn-azul" onclick="mostrar('juego4')">Continuar</button>`; return; }
+    const f = frases[idx]; document.getElementById("frase").innerText = `"${f.texto}"`;
+    const all = [...f.opciones, f.correcta].sort(()=>Math.random()-0.5);
+    document.getElementById("opcionesPrincipito").innerHTML = all.map(o => `<button class="btn" style="background:#1c2541; color:white;" onclick="verificarPrincipito('${o}')">${o}</button>`).join(" ");
+  }
+  window.verificarPrincipito = (o)=>{ if(o===frases[idx].correcta){ idx++; render(); } };
+  const obs = new MutationObserver(()=>{ if(document.getElementById("juego3").style.display==="block") render(); });
+  obs.observe(document.body,{attributes:true, subtree:true});
+})();
 
+// Juego 4: Esquiva
+(function(){
+  const canvas = document.getElementById("canvasEsquiva"), ctx = canvas.getContext("2d"), corazon = {x:300,y:350};
+  let obstaculos = [], puntos = 0, jugando = true;
+  canvas.addEventListener("mousemove", (e)=>{ const r = canvas.getBoundingClientRect(); corazon.x = e.clientX-r.left; corazon.y = e.clientY-r.top; });
+  function clima(){ if(!jugando) return; obstaculos.push({x:Math.random()*580, y:-50, tipo:"☁️", vy:5}); setTimeout(clima,300); }
+  function frame(){
+    ctx.clearRect(0,0,600,450); ctx.fillText("❤️",corazon.x,corazon.y);
+    obstaculos.forEach(o=>{ ctx.fillText(o.tipo,o.x,o.y); o.y+=o.vy; if(Math.hypot(corazon.x-o.x, corazon.y-o.y)<30) puntos=Math.max(0,puntos-1); });
+    puntos+=0.5; document.getElementById("energia").innerText=`Energía: ${Math.floor(puntos)}%`;
+    if(puntos>=100){ jugando=false; document.getElementById("juego4").innerHTML=`<h2>¡Cielo Despejado!</h2><button class="btn btn-azul" onclick="mostrar('juego5')">Siguiente</button>`; }
+    else { requestAnimationFrame(frame); }
+  }
+  const obs = new MutationObserver(()=>{ if(document.getElementById("juego4").style.display==="block") {puntos=0; jugando=true; clima(); frame();} });
+  obs.observe(document.body,{attributes:true, subtree:true});
+})();
+
+// Juego 5: Laberinto
+(function(){
+  const canvas = document.getElementById("canvasLaberinto"), ctx = canvas.getContext("2d");
+  let jugador={x:30,y:40}, jugando=true;
+  canvas.addEventListener("mousemove",(e)=>{ const r=canvas.getBoundingClientRect(); jugador.x=e.clientX-r.left; jugador.y=e.clientY-r.top; });
+  function loop(){
+    if(!jugando) return; ctx.clearRect(0,0,600,400); ctx.fillText("💖",jugador.x,jugador.y);
+    ctx.fillRect(530,340,50,50);
+    if(jugador.x>530 && jugador.y>340){ jugando=false; document.getElementById("juego5").innerHTML=`<h2>¡Logrado!</h2><button class="btn btn-primario" onclick="mostrar('juego6')">Ver Regalo</button>`; }
+    else { requestAnimationFrame(loop); }
+  }
+  const obs = new MutationObserver(()=>{ if(document.getElementById("juego5").style.display==="block") {jugando=true; loop();} });
+  obs.observe(document.body,{attributes:true, subtree:true});
+})();
+
+// Juego 6: Jardín
+(function(){
+  const canvas = document.getElementById("canvasJardin"), ctx = canvas.getContext("2d");
+  function escena(){
+    ctx.clearRect(0,0,800,650); ctx.fillText("Para mi lugar seguro...",280,90);
+    for(let i=0;i<20;i++){ ctx.fillText("🌸", Math.random()*700, 500); }
+  }
+  const obs = new MutationObserver(()=>{ if(document.getElementById("juego6").style.display==="block") escena(); });
+  obs.observe(document.body,{attributes:true, subtree:true});
+})();
+
+// Trivia, Letra, Artista (7, 8, 9)
+(function(){
+  window.verificarTrivia = (o)=>{ if(o==="Michael Jackson" || o==="Rock" || o==="Luis Miguel") mostrar('juego8'); };
+  window.verificarLetra = (o)=>{ if(o==="you" || o.includes("respondido")) mostrar('juego9'); };
+  window.verificarArtista = ()=>{ if(document.getElementById("entradaArtista").value.toLowerCase().includes("luis miguel")) mostrar('juego10'); };
+})();
+
+// Juego 10: Fuegos
+(function(){
+  const canvas = document.getElementById("canvasFuegos"), ctx = canvas.getContext("2d");
+  function loop(){ ctx.clearRect(0,0,800,650); ctx.fillText("✨", Math.random()*800, Math.random()*600); requestAnimationFrame(loop); }
+  const obs = new MutationObserver(()=>{ if(document.getElementById("juego10").style.display==="block") loop(); });
+  obs.observe(document.body,{attributes:true, subtree:true});
+})();
+
+// Carta Final (CORREGIDO ERROR i++)
+(function(){
+  const canvas = document.getElementById("canvasCarta"), ctx = canvas.getContext("2d");
+  let hearts=[];
+  function loop(){
+    ctx.clearRect(0,0,820,520);
+    hearts.forEach(h=>{ h.y-=1; ctx.fillText("💗", h.x, h.y); });
+    requestAnimationFrame(loop);
+  }
+  function start(){ for(let i=0; i<28; i++){ hearts.push({x:Math.random()*800, y:500}); } loop(); }
+  window.finalizarCarta = ()=>{ document.getElementById("cartaFinal").innerHTML="<h2>Gracias por leer 💌</h2>"; };
+  const obs = new MutationObserver(()=>{ if(document.getElementById("cartaFinal").style.display==="block") start(); });
+  obs.observe(document.body,{attributes:true, subtree:true});
+})();
 </script>
 </body>
 </html>
-
-
-
 
 
 
