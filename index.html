@@ -6,57 +6,76 @@
   <style>
     body {
       background-color: #FFF0F5;
-      font-family: Georgia, serif;
-      text-align: center;
+      font-family: 'Georgia', serif;
       color: #DB7093;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      padding: 60px 20px 20px;
     }
     h1 {
-      margin-top: 40px;
-      font-size: 36px;
+      font-size: 40px;
+      margin-bottom: 10px;
     }
     p {
       font-size: 18px;
       color: #8B5C7E;
+      margin-bottom: 30px;
     }
-    a {
+    .boton {
       display: inline-block;
-      margin-top: 20px;
+      margin: 10px;
       padding: 12px 25px;
       background: #FF69B4;
       color: white;
       text-decoration: none;
       font-weight: bold;
       border-radius: 8px;
+      transition: background 0.3s;
     }
-    a:hover {
+    .boton:hover {
       background: #DB7093;
     }
-    pre {
-      text-align: left;
-      background: #f8f8f8;
+    .codigo {
+      background: #fefefe;
+      border: 2px dashed #FFC0CB;
       padding: 20px;
-      border-radius: 10px;
-      overflow-x: auto;
-      max-width: 90%;
-      margin: 30px auto;
+      margin: 40px auto;
+      width: 90%;
+      max-width: 900px;
+      text-align: left;
+      font-family: 'Courier New', monospace;
       font-size: 13px;
+      color: #333;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    footer {
+      margin-top: 60px;
+      font-style: italic;
+      color: #BC8F8F;
     }
   </style>
 </head>
 <body>
-  <h1>✨ Bienvenida a mi rincón mágico ✨</h1>
-  <p>Este proyecto está hecho en <strong>Python con Tkinter</strong>.<br>
-     Para jugarlo, descárgalo y ejecútalo en tu computador.</p>
+  <header>
+    <h1>✨ Bienvenida a mi rincón mágico ✨</h1>
+    <p>Este proyecto está hecho con amor usando <strong>Python y Tkinter</strong>.<br>
+       Puedes explorar el código o descargarlo para jugar en tu computador.</p>
+    <a class="boton" href="juego_magico.py" download>📥 Descargar Juego</a>
+    <a class="boton" href="#codigo">🌸 Ver Código Fuente</a>
+  </header>
 
-  <a href="https://github.com/TU_USUARIO/TU_REPO/archive/refs/heads/main.zip">📥 Descargar Juego</a>
+  <div id="codigo" class="codigo">
+    <!-- Aquí va tu código Python completo -->
+    <!-- Pega el contenido de tu archivo .py aquí -->
+    import tkinter as tk
+    import random
+    import math
 
-  <h2 style="margin-top:50px;">🌸 Código Fuente 🌸</h2>
-  <pre><code>
-import tkinter as tk
-import random
-import math
-
-# ==========================================
+  # ==========================================
 # 1. BIENVENIDA (ESTILO ELEGANTE)
 # ==========================================
 class PantallaBienvenida:
@@ -619,7 +638,7 @@ class AdivinaEmojiArtista:
         self.retos = [
             {"e": "☀️ 🇲🇽 🎙️", "c": "Luis Miguel"},
             {"e": "🌙 🎤 👱🏻‍♀️ 💅", "c": "Ariana Grande"},
-            {"e": "🎸 🎩 🔫 🌹", "c": "Guns N' Roses"}
+            {"e": "🐰🎤🔥", "c": "bad bunny"}
         ]
         self.idx = 0
         self.mostrar()
@@ -868,10 +887,10 @@ if __name__ == "__main__":
     App(root)
     root.mainloop()
 
-  </code></pre>
+  </div>
 
-  <p style="margin-top:50px; font-style:italic;">
+  <footer>
     “Lo esencial es invisible a los ojos” 🌌
-  </p>
+  </footer>
 </body>
 </html>
