@@ -7,121 +7,95 @@
   <style>
     :root {
       --rosa:#FF69B4; --rosa-claro:#FFB6C1; --magenta:#DB7093; --bg:#FFF0F5;
-      --oscuro:#0b132b; --azul:#00d4ff; --verde:#1DB954; --gris:#1a1a1a; --oro:#FFD700;
-      --pasto:#90EE90; /* Verde más claro para el jardín */
+      --oscuro:#0b132b; --azul:#00d4ff; --verde:#1DB954; --pasto:#A2FF95;
     }
-    * { box-sizing: border-box; touch-action: manipulation; }
-    body { margin:0; font-family: 'Georgia', serif; background: var(--bg); color:#333; overflow-x: hidden; }
-    .pantalla { display:none; padding:20px; text-align:center; min-height:100vh; animation: fadeIn 0.5s; }
+    * { box-sizing: border-box; touch-action: none; }
+    body { margin:0; font-family: 'Segoe UI', serif; background: var(--bg); color:#333; overflow-x: hidden; }
+    .pantalla { display:none; padding:20px; text-align:center; min-height:100vh; animation: fadeIn 0.4s ease-in; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    
-    .btn { margin:8px; padding:12px 18px; border:none; border-radius:12px; font-weight:bold; cursor:pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .btn:active { transform: scale(0.95); }
+    .btn { margin:8px; padding:12px 18px; border:none; border-radius:12px; font-weight:bold; cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.2s; }
     .btn-primario { background: var(--rosa); color: white; }
     .btn-rosa { background: var(--rosa-claro); color:white; }
-    .btn-verde { background: var(--verde); color:white; }
-    .btn-azul { background: var(--azul); color:black; }
-    
-    canvas { border:3px solid #ffc0cb; background:transparent; border-radius:15px; max-width: 100%; height: auto; touch-action: none; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-    input { padding:14px; font-size:16px; border:2px solid var(--rosa-claro); border-radius:12px; text-align:center; width: 85%; margin-bottom: 15px; outline: none; }
-    
-    .card-trivia { background: white; padding: 20px; border-radius: 20px; border: 2px dashed var(--rosa); margin: 15px auto; max-width: 400px; }
+    canvas { border:3px solid #ffc0cb; border-radius:15px; max-width: 100%; background: white; }
+    input { padding:14px; font-size:16px; border:2px solid var(--rosa-claro); border-radius:12px; text-align:center; width: 85%; }
+    .card { background: white; padding: 20px; border-radius: 20px; border: 2px solid var(--rosa-claro); margin: 15px auto; max-width: 450px; }
   </style>
 </head>
 <body>
 
 <section id="bienvenida" class="pantalla" style="display:block;">
-  <h1 style="color:var(--magenta); font-size: 2.5em; margin-top: 50px;">Para mi persona favorita</h1>
-  <p style="color:#BC8F8F; font-size: 1.2em;">He preparado este pequeño rincón para ti.<br>¿Me permites mostrarte?</p>
-  <div style="font-size: 50px; margin: 30px;">🌸✨💖</div>
-  <button class="btn btn-rosa" onclick="mostrar('juego1')">Comenzar Viaje ✨</button>
+  <h1 style="color:var(--magenta); margin-top:50px;">Para mi persona favorita</h1>
+  <p style="color:#BC8F8F; font-size:1.1em;">He preparado este pequeño rincón para ti.<br>¿Estás lista?</p>
+  <div style="font-size:60px; margin:30px;">🌸✨</div>
+  <button class="btn btn-rosa" onclick="mostrar('juego1')">Comenzar ✨</button>
 </section>
 
 <section id="juego1" class="pantalla">
-  <h2 style="color:#CD5C5C">💖 Primer Reto: Afecto</h2>
-  <div id="ronda1">
-    <h3>Ronda 1: Un besito ❤️</h3>
-    <canvas id="canvasR1" width="600" height="260"></canvas>
-    <br><button class="btn btn-rosa" onclick="pasarRonda(1)">Siguiente ➡️</button>
-  </div>
-  <div id="ronda2" style="display:none;">
-    <h3>Ronda 2: Un abrazo 💜</h3>
-    <canvas id="canvasR2" width="600" height="260"></canvas>
-    <br><button class="btn btn-rosa" onclick="pasarRonda(2)">Siguiente ➡️</button>
-  </div>
-  <div id="ronda3" style="display:none;">
-    <h3>Busca 5 corazones rosados 💗</h3>
-    <canvas id="canvasCorazones" width="600" height="350"></canvas>
-    <p id="puntos" style="font-weight: bold; font-size: 1.2em;">Puntos: 0/5</p>
-    <button id="btnNext1" class="btn btn-primario" style="display:none;" onclick="mostrar('juego2')">¡Logrado! Siguiente ➡️</button>
-  </div>
+  <div id="ronda1"><h3>Un besito ❤️</h3><canvas id="canvasR1" width="600" height="260"></canvas><br><button class="btn btn-rosa" onclick="pasarRonda(1)">Siguiente</button></div>
+  <div id="ronda2" style="display:none;"><h3>Un abrazo 💜</h3><canvas id="canvasR2" width="600" height="260"></canvas><br><button class="btn btn-rosa" onclick="pasarRonda(2)">Siguiente</button></div>
+  <div id="ronda3" style="display:none;"><h3>Busca 5 corazones rosados 💗</h3><canvas id="canvasCorazones" width="600" height="350"></canvas><p id="puntos">Puntos: 0/5</p><button id="btnNext1" class="btn btn-primario" style="display:none;" onclick="mostrar('juego2')">¡Logrado! ➡️</button></div>
 </section>
 
 <section id="juego2" class="pantalla">
   <h2 style="color:var(--magenta)">🎨 Encuentra el color oculto</h2>
-  <p id="intentos" style="font-size: 1.1em;">Te quedan 3 intentos</p>
-  <div id="opciones"></div>
-  <p id="mensaje" style="color:#F08080; font-style: italic; min-height: 24px;"></p>
+  <p id="intentos">Te quedan 3 intentos</p>
+  <div id="opcionesCol"></div>
+  <p id="mensajeCol" style="color:#F08080; min-height:30px;"></p>
 </section>
 
-<section id="juego3" class="pantalla" style="background: var(--oscuro); color: white;">
+<section id="juego3" class="pantalla" style="background:var(--oscuro); color:white;">
   <h2>🚀 Viaje Estelar</h2>
-  <div class="card-trivia" style="background: rgba(255,255,255,0.1); border: 1px solid var(--azul);">
-    <p id="frase" style="font-size: 1.2em; line-height: 1.5;"></p>
+  <div class="card" style="background:rgba(255,255,255,0.1); border-color:var(--azul);">
+    <p id="fraseP" style="font-size:1.2em; color:white;"></p>
   </div>
-  <div id="opcionesPrincipito"></div>
-  <p id="estado" style="margin-top: 15px; font-weight: bold;"></p>
+  <div id="opcionesP"></div>
+  <p id="estadoP" style="margin-top:10px;"></p>
 </section>
 
 <section id="juego4" class="pantalla" style="background:#0d1b2a; color:white;">
   <h2>✨ PROTEGE NUESTRO CIELO ✨</h2>
   <canvas id="canvasEsquiva" width="600" height="450"></canvas>
-  <p id="energia" style="font-size: 1.3em; color: var(--azul);">Energía del Amor: 0%</p>
+  <p id="energia" style="font-size:1.3em; color:var(--azul);">Energía: 0%</p>
 </section>
 
 <section id="juego5" class="pantalla">
-  <h2>💖 Laberinto del Destino</h2>
-  <p>Cruza los muros móviles. ¡Ahora es mucho más largo!</p>
-  <p id="vidasLab" style="font-size: 1.2em;">Vidas: ❤️ ❤️ ❤️</p>
+  <h2>⚡ Laberinto Eléctrico 💖</h2>
+  <p>¡Cuidado con los muros y los rayos!</p>
+  <p id="vidasLab">Vidas: ❤️ ❤️ ❤️</p>
   <canvas id="canvasLaberinto" width="600" height="700"></canvas>
 </section>
 
 <section id="juego6" class="pantalla">
-  <h2 style="color:#DB7093">🌸 Mi Jardín de Paz 🌸</h2>
+  <h2 style="color:#DB7093">🌸 Un Jardín para ti 🌸</h2>
   <canvas id="canvasJardin" width="800" height="600"></canvas>
-  <p style="font-style:italic; color:#DB7093; margin-top:15px; font-size: 1.1em;">"Eres lo más bonito de mi vida, mi lugar seguro."</p>
-  <button class="btn btn-primario" onclick="mostrar('juego7')">Continuar ➡️</button>
+  <p style="font-style:italic; color:#DB7093; margin-top:10px;">"Eres mi lugar seguro."</p>
+  <button class="btn btn-primario" onclick="mostrar('juego7')">Continuar ✨</button>
 </section>
 
 <section id="juego7" class="pantalla">
-  <h2 style="color: var(--magenta);">🎵 Trivia de Curiosidades 🎵</h2>
-  <div class="card-trivia">
-    <p id="preguntaTrivia" style="font-size: 1.2em; color: #333;"></p>
-  </div>
-  <div id="opcionesTrivia"></div>
+  <h2 style="color:var(--magenta)">✨🏆✨ Trivia de Curiosidades</h2>
+  <div class="card"><p id="pregT" style="font-size:1.1em;"></p></div>
+  <div id="optsT"></div>
 </section>
 
 <section id="juego8" class="pantalla">
-  <h2>🎤 El Reto del Micrófono 🎤</h2>
-  <p id="tituloLetra" style="color: #888; margin-bottom: 5px;"></p>
-  <p id="fraseLetra" style="font-weight:bold; font-size: 1.3em; margin: 20px 0; color: var(--magenta);"></p>
-  <div id="opcionesLetra"></div>
+  <h2>🎤 El Reto del Micrófono (5/5)</h2>
+  <p id="titL" style="color:#888;"></p>
+  <p id="fraseL" style="font-weight:bold; font-size:1.2em; margin:20px 0; color:var(--magenta);"></p>
+  <div id="optsL"></div>
 </section>
 
 <section id="juego9" class="pantalla">
-  <h2>🕵️ Adivina el Artista</h2>
-  <p id="emojiArtista" style="font-size:60px; margin: 25px 0;"></p>
-  <input id="entradaArtista" type="text" placeholder="¿Quién es?" />
-  <br><button class="btn btn-verde" onclick="verificarArtista()">Comprobar Artista</button>
+  <h2>🕵️ Adivina el Artista (4 Retos)</h2>
+  <p id="emojiA" style="font-size:60px; margin:25px 0;"></p>
+  <input id="inA" type="text" placeholder="¿Quién es?" />
+  <br><button class="btn btn-primario" onclick="checkA()" style="margin-top:15px;">Comprobar</button>
 </section>
 
 <section id="juego10" class="pantalla" style="background:#000014; color:white;">
-  <h2 style="color:var(--oro); font-size: 2em;">🎉 ¡ERES INCREÍBLE! 🎉</h2>
-  <div style="background: rgba(255,105,180,0.1); padding: 15px; border-radius: 15px; margin: 10px auto; border: 1px solid var(--rosa); max-width: 400px;">
-    <p style="color: var(--rosa-claro); font-weight: bold;">Tus canciones favoritas te esperan:</p>
-    <p style="font-size: 0.9em; line-height: 1.6;">
-      1. The Boy Is Mine - Ariana <br> 2. Gata Only - Cris MJ <br> 3. Tití Me Preguntó - Bad Bunny <br> 4. 34+35 - Ariana <br> 5. Lo Que Siento - Cuco
-    </p>
+  <h2>🎉 ¡ERES LA MEJOR! 🎉</h2>
+  <div style="background:rgba(255,255,255,0.1); padding:15px; border-radius:15px; border:1px solid var(--rosa); max-width:400px; margin:10px auto; font-size:0.9em;">
+    <p>The Boy Is Mine • Gata Only • Tití Me Preguntó • 34+35 • Lo Que Siento</p>
   </div>
   <canvas id="canvasFuegos" width="800" height="500"></canvas>
   <br><button class="btn btn-rosa" onclick="mostrar('cartaFinal')">Leer mi Carta 💌</button>
@@ -129,274 +103,217 @@
 
 <section id="cartaFinal" class="pantalla">
   <canvas id="canvasCarta" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;"></canvas>
-  <div style="position:relative; z-index:2; background:#FFEFF4; border:2px solid #FFC0CB; border-radius:20px; padding:30px; max-width:600px; margin:20px auto; box-shadow:0 10px 40px rgba(0,0,0,0.1);">
-    <h3 style="color:#DB7093; font-size: 1.5em;">Mi carta para ti...</h3>
-    <div style="text-align:justify; font-size:16px; line-height:1.8; color:#444; max-height:400px; overflow-y:auto; padding-right:15px;" id="textoCarta">
+  <div style="position:relative; z-index:2; background:#FFEFF4; border:2px solid #FFC0CB; border-radius:20px; padding:25px; max-width:600px; margin:20px auto;">
+    <h3 style="color:#DB7093;">Mi carta para ti...</h3>
+    <div style="text-align:justify; font-size:15px; line-height:1.7; color:#444; max-height:400px; overflow-y:auto;" id="cartaTxt">
       Quizá te demuestro muy poco y quizá esto no sea nada o, si lo es, no sea suficiente. No es que no quiera expresar o mostrar todo lo que siento. Realmente, hay muchas cosas que siento y que quisiera expresar, pero creo que de verdad me quedo corta, jajaja, irónico ¿cierto? Haciendo esto cayeron varias de mis lágrimas, no lo voy a negar. Muchas cosas me asustan y, entre esas, que me destrocen, porque una vez ya llegué a eso. Al menos, si llego a caer ahí otra vez, que no sea por ti, por favor. Quiero algo bonito e igual siento que quizá si no funciona pueda ser porque soy yo el problema. Siendo así, te pido disculpas, quizá por el miedo a llorar me limité a ciertas cosas. Bueno, pero quiero que sepas que hay muchos sentimientos, muchas emociones que me haces sentir. Me haces feliz y quiero poder hacerte igual de feliz. Gracias por estar y por aguantarme. Sé que me pongo tonta y sigo mejorando por ti para ser y poder entregarte lo mejor. ¡Muakkkk!
     </div>
-    <button class="btn btn-primario" style="margin-top:25px;" onclick="location.reload()">Cerrar con un abrazo 🤗</button>
+    <button class="btn btn-primario" style="margin-top:20px;" onclick="location.reload()">Finalizar 🤗</button>
   </div>
 </section>
 
 <script>
-// --- MOTOR PRINCIPAL ---
+// --- MOTOR ---
 function mostrar(id){
   document.querySelectorAll('.pantalla').forEach(p=>p.style.display='none');
   document.getElementById(id).style.display='block';
   window.scrollTo(0,0);
 }
-
-function getPos(e, canvas) {
-  const rect = canvas.getBoundingClientRect();
+function getPos(e, cvs) {
+  const r = cvs.getBoundingClientRect();
   const cx = e.touches ? e.touches[0].clientX : e.clientX;
   const cy = e.touches ? e.touches[0].clientY : e.clientY;
-  return { 
-    x: (cx - rect.left) * (canvas.width / rect.width), 
-    y: (cy - rect.top) * (canvas.height / rect.height) 
-  };
+  return { x: (cx-r.left)*(cvs.width/r.width), y: (cy-r.top)*(cvs.height/r.height) };
 }
 
-// --- JUEGO 1: CORAZONES (TACTO) ---
-function pasarRonda(n){
-  document.getElementById("ronda"+n).style.display="none";
-  document.getElementById("ronda"+(n+1)).style.display="block";
-}
-const setupHuye = (id, em) => {
+// --- JUEGO 1 Y 2 (COLORES TROLL) ---
+function pasarRonda(n){ document.getElementById("ronda"+n).style.display="none"; document.getElementById("ronda"+(n+1)).style.display="block"; }
+const huye = (id, em) => {
   const cvs = document.getElementById(id), ctx = cvs.getContext("2d");
   let p = {x:300, y:130};
   const d = () => { ctx.clearRect(0,0,cvs.width,cvs.height); ctx.font="50px Arial"; ctx.fillText(em, p.x-25, p.y+20); };
-  const m = (e) => {
+  cvs.addEventListener("touchstart", (e)=>{
     const pos = getPos(e, cvs);
-    if(Math.hypot(pos.x-p.x, pos.y-p.y) < 70) {
-      p.x = Math.random()*(cvs.width-100)+50; p.y = Math.random()*(cvs.height-100)+50;
-      d();
-    }
-  };
-  cvs.addEventListener("touchstart", (e)=>{e.preventDefault(); m(e);}, {passive:false});
-  cvs.addEventListener("mousemove", m);
+    if(Math.hypot(pos.x-p.x, pos.y-p.y) < 70) { p.x = Math.random()*500+50; p.y = Math.random()*180+50; d(); }
+  });
   d();
 };
-setupHuye("canvasR1", "❤️"); setupHuye("canvasR2", "💜");
+huye("canvasR1", "❤️"); huye("canvasR2", "💜");
 
-(function(){
-  const cvs = document.getElementById("canvasCorazones"), ctx = cvs.getContext("2d");
-  let pts = 0, items = [];
-  function spawn(){
-    if(pts>=5) return;
-    items.push({x:Math.random()*540+30, y:Math.random()*300+30, t:["❤️","💜","💗","🌸"][(Math.random()*4)|0]});
-    ctx.clearRect(0,0,cvs.width,cvs.height);
-    items.forEach(i=>{ ctx.font="35px Arial"; ctx.fillText(i.t, i.x, i.y); });
-    setTimeout(spawn, 300);
-  }
-  cvs.addEventListener("touchstart", (e)=>{
-    e.preventDefault(); const pos = getPos(e, cvs);
-    items.forEach((it, idx)=>{
-      if(Math.hypot(pos.x-it.x-15, pos.y-it.y+15)<45 && it.t==="💗"){
-        pts++; items.splice(idx,1);
-        document.getElementById("puntos").innerText = `Puntos: ${pts}/5`;
-        if(pts>=5) document.getElementById("btnNext1").style.display="inline-block";
-      }
-    });
-  }, {passive:false});
-  const obs = new MutationObserver(()=>{ if(document.getElementById("ronda3").style.display==="block" && items.length===0) spawn(); });
-  obs.observe(document.body, {attributes:true, subtree:true});
-})();
-
-// --- JUEGO 2: COLORES (TROLL) ---
 (function(){
   let ints = 3;
-  const tMsgs = ["¿Azul como el mar? No creo... 🌊", "El rojo es lindo, pero ¿es ese? ❤️", "Verde esperanza... pero esperanza de ganar 🌿"];
-  window.checkC = (n) => {
+  window.checkCol = (n) => {
     ints--;
-    if(ints>0) {
-      document.getElementById("mensaje").innerText = tMsgs[Math.floor(Math.random()*tMsgs.length)];
-      document.getElementById("intentos").innerText = `Te quedan ${ints} intentos`;
-    } else {
-      document.getElementById("intentos").innerText = "¡Se acabaron los intentos! 🤭";
-      document.getElementById("opciones").innerHTML = `<button class="btn btn-rosa" onclick="mostrarTroll()">Tap tap aquí, te equivocaste, era el color de fondo 🤡</button>`;
+    if(ints>0) document.getElementById("mensajeCol").innerText = "Nop... ¡Ese no!";
+    else {
+      document.getElementById("opcionesCol").innerHTML = `<button class="btn btn-rosa" onclick="mostrarTroll()">Tap tap aquí, te equivocaste, era el color de fondo 🤡</button>`;
     }
   };
-  window.mostrarTroll = () => {
-    document.getElementById("juego2").innerHTML = `<h2 style="color:white; background:#FFC0CB; padding:60px; border-radius:20px;">¡Era obvio!<br>El color era ROSADO 💗</h2><button class="btn btn-primario" onclick="mostrar('juego3')">Continuar ✨</button>`;
-  };
+  window.mostrarTroll = () => { mostrar('juego3'); };
   const ops = [{n:"Azul", c:"#ADD8E6"}, {n:"Rojo", c:"#FFB2B2"}, {n:"Verde", c:"#C2F0C2"}, {n:"Amarillo", c:"#FFFFE0"}];
-  document.getElementById("opciones").innerHTML = ops.map(o=>`<button class="btn" style="background:${o.c}; width:120px;" onclick="checkC('${o.n}')">${o.n}</button>`).join("");
+  document.getElementById("opcionesCol").innerHTML = ops.map(o=>`<button class="btn" style="background:${o.c}" onclick="checkCol()">${o.n}</button>`).join("");
 })();
 
-// --- JUEGO 3: PRINCIPITO ---
+// --- JUEGO 3: PRINCIPITO (FRASE EXTRA) ---
 (function(){
   const f = [
-    {q:"Lo esencial es invisible...", a:"a los ojos", o:["al corazón","a la mente"]},
-    {q:"Fue el tiempo que pasaste con tu...", a:"rosa", o:["planeta","zorro"]},
-    {q:"Todas las personas mayores fueron al principio...", a:"niños", o:["sabios","soñadores"]}
+    {q:"Lo esencial es invisible...", a:"a los ojos", o:["al corazón","a la mente","al alma"]},
+    {q:"Fue el tiempo que pasaste con tu...", a:"rosa", o:["planeta","zorro","viaje"]},
+    {q:"Si vienes a las cuatro de la tarde...", a:"seré feliz", o:["estaré listo","seré puntual","te veré"]},
+    {q:"Es una locura odiar a todas las rosas porque...", a:"una te pinchó", o:["son rojas","tienen espinas","marchitan"]}
   ];
   let i = 0;
-  window.checkP = (a)=>{ 
-    if(a===f[i].a){ i++; render(); } 
-    else { document.getElementById("estado").innerText="❌ Intenta de nuevo"; }
-  };
-  function render(){
-    if(i>=f.length) { document.getElementById("juego3").innerHTML = `<h2 style="color:var(--oro)">✨ ¡Sabias palabras! ✨</h2><button class="btn btn-azul" onclick="mostrar('juego4')">Seguir Viaje 🚀</button>`; return; }
-    document.getElementById("frase").innerText = `"${f[i].q}"`;
-    document.getElementById("estado").innerText = "";
+  window.checkP = (a)=>{ if(a===f[i].a){ i++; rdr(); } else { document.getElementById("estadoP").innerText="❌ Intenta de nuevo"; } };
+  function rdr(){
+    if(i>=f.length){ document.getElementById("juego3").innerHTML = `<button class="btn btn-azul" onclick="mostrar('juego4')">Continuar 🚀</button>`; return; }
+    document.getElementById("fraseP").innerText = `"${f[i].q}"`;
     const opts = [...f[i].o, f[i].a].sort(()=>Math.random()-0.5);
-    document.getElementById("opcionesPrincipito").innerHTML = opts.map(o=>`<button class="btn" style="background:#1c2541; color:white;" onclick="checkP('${o}')">${o}</button>`).join("");
+    document.getElementById("opcionesP").innerHTML = opts.map(o=>`<button class="btn" style="background:#1c2541; color:white; display:block; width:90%; margin:5px auto;" onclick="checkP('${o}')">${o}</button>`).join("");
   }
-  render();
+  rdr();
 })();
 
-// --- JUEGO 4: CIELO (RAYOS ⚡) ---
+// --- JUEGO 4: CIELO ---
 (function(){
   const cvs = document.getElementById("canvasEsquiva"), ctx = cvs.getContext("2d");
-  let cor = {x:300, y:350}, p = 0, act = false, obs = [], rayos = [];
-  cvs.addEventListener("touchmove", (e)=>{ e.preventDefault(); const pos = getPos(e, cvs); cor.x = pos.x; cor.y = pos.y; }, {passive:false});
+  let cor = {x:300, y:350}, p = 0, act = false, obs = [];
+  cvs.addEventListener("touchmove", (e)=>{ const pos = getPos(e, cvs); cor.x = pos.x; cor.y = pos.y; });
   function loop(){
     if(!act) return;
-    ctx.clearRect(0,0,600,450);
-    ctx.font="30px Arial"; ctx.fillText("❤️", cor.x-15, cor.y);
-    if(Math.random()<0.1) obs.push({x:Math.random()*600, y:-30, t:["☁️","❄️"][(Math.random()*2)|0], v:6});
-    if(Math.random()<0.03) rayos.push({x:-40, y:Math.random()*400, v:15});
-    
-    obs.forEach((o,i)=>{
-      ctx.fillText(o.t, o.x, o.y); o.y+=o.v;
-      if(Math.hypot(cor.x-o.x, cor.y-o.y)<35) p = Math.max(0, p-4);
-    });
-    rayos.forEach((r,i)=>{
-      ctx.fillStyle="#ffd60a"; ctx.fillText("⚡", r.x, r.y); r.x+=r.v;
-      if(Math.hypot(cor.x-r.x, cor.y-r.y)<30) p = Math.max(0, p-10);
-    });
-    p += 0.4; document.getElementById("energia").innerText = `Energía: ${Math.floor(Math.min(100,p))}%`;
-    if(p>=100) { act=false; document.getElementById("juego4").innerHTML += `<button class="btn btn-azul" onclick="mostrar('juego5')">¡CIELO DESPEJADO!</button>`; }
-    else requestAnimationFrame(loop);
+    ctx.clearRect(0,0,600,450); ctx.font="30px Arial"; ctx.fillText("❤️", cor.x-15, cor.y);
+    if(Math.random()<0.1) obs.push({x:Math.random()*600, y:-30, v:6});
+    obs.forEach(o=>{ ctx.fillText("⚡", o.x, o.y); o.y+=o.v; if(Math.hypot(cor.x-o.x, cor.y-o.y)<30) p=Math.max(0, p-5); });
+    p+=0.4; document.getElementById("energia").innerText = `Energía: ${Math.floor(Math.min(100,p))}%`;
+    if(p>=100) { act=false; mostrar('juego5'); } else requestAnimationFrame(loop);
   }
-  const ob = new MutationObserver(()=>{ if(document.getElementById("juego4").style.display==="block" && !act) { act=true; loop(); } });
+  const ob = new MutationObserver(()=>{ if(document.getElementById("juego4").style.display==="block" && !act){ act=true; loop(); } });
   ob.observe(document.body, {attributes:true, subtree:true});
 })();
 
-// --- JUEGO 5: LABERINTO (EXTREMO) ---
+// --- JUEGO 5: LABERINTO CON RAYOS ---
 (function(){
   const cvs = document.getElementById("canvasLaberinto"), ctx = cvs.getContext("2d");
-  let jug = {x:30, y:30}, vds = 3, muros = [
-    {x:0, y:120, w:500, h:20, d:3},
-    {x:100, y:240, w:500, h:20, d:-3},
-    {x:0, y:360, w:500, h:20, d:4},
-    {x:100, y:480, w:500, h:20, d:-4},
-    {x:0, y:600, w:550, h:20, d:5}
-  ];
-  const mvr = (e)=>{ const p = getPos(e, cvs); jug.x = p.x; jug.y = p.y; };
-  cvs.addEventListener("touchmove", (e)=>{e.preventDefault(); mvr(e);}, {passive:false});
+  let jug = {x:30, y:30}, vds = 3, act = false;
+  let muros = [{x:0, y:120, w:450, d:3}, {x:150, y:280, w:450, d:-3}, {x:0, y:440, w:500, d:4}, {x:100, y:600, w:500, d:-4}];
+  let rayos = [];
+  cvs.addEventListener("touchmove", (e)=>{ const pos = getPos(e, cvs); jug.x = pos.x; jug.y = pos.y; });
   function loop(){
+    if(!act) return;
     ctx.clearRect(0,0,600,700);
-    ctx.fillStyle="#FF1493"; ctx.beginPath(); ctx.arc(550, 660, 30, 0, Math.PI*2); ctx.fill(); // Meta
+    ctx.fillStyle="#FF1493"; ctx.beginPath(); ctx.arc(550, 660, 25, 0, Math.PI*2); ctx.fill(); // Meta
     ctx.fillStyle="#FF69B4";
     muros.forEach(m => {
-      ctx.fillRect(m.x, m.y, m.w, m.h); m.w += m.d;
-      if(m.w > 580 || m.w < 80) m.d *= -1;
-      if(jug.x > m.x && jug.x < m.x+m.w && jug.y > m.y && jug.y < m.y+m.h){
-        jug = {x:30, y:30}; vds--; document.getElementById("vidasLab").innerText = "Vidas: " + "❤️".repeat(vds);
-        if(vds<=0) { vds=3; jug={x:30,y:30}; }
-      }
+      ctx.fillRect(m.x, m.y, m.w, 20); m.w += m.d; if(m.w > 550 || m.w < 100) m.d *= -1;
+      if(jug.x > m.x && jug.x < m.x+m.w && jug.y > m.y && jug.y < m.y+20) { jug={x:30, y:30}; vds--; }
     });
-    ctx.font="22px Arial"; ctx.fillText("💖", jug.x-10, jug.y+10);
-    if(jug.x>520 && jug.y>630) { document.getElementById("juego5").innerHTML = `<h2>¡ERES UNA EXPERTA!</h2><button class="btn btn-rosa" onclick="mostrar('juego6')">Ir al Jardín 🎁</button>`; }
+    if(Math.random()<0.05) rayos.push({x:Math.random()*600, y:-20, v:8});
+    rayos.forEach(r => {
+      ctx.fillStyle="yellow"; ctx.font="25px Arial"; ctx.fillText("⚡", r.x, r.y); r.y += r.v;
+      if(Math.hypot(jug.x-r.x, jug.y-r.y)<25) { jug={x:30, y:30}; vds--; }
+    });
+    document.getElementById("vidasLab").innerText = "Vidas: " + "❤️".repeat(vds);
+    ctx.fillText("💖", jug.x-10, jug.y+10);
+    if(vds<=0) { vds=3; jug={x:30,y:30}; }
+    if(jug.x>520 && jug.y>630) { act=false; mostrar('juego6'); }
     else requestAnimationFrame(loop);
   }
-  const ob = new MutationObserver(()=>{ if(document.getElementById("juego5").style.display==="block") loop(); });
+  const ob = new MutationObserver(()=>{ if(document.getElementById("juego5").style.display==="block") { act=true; loop(); } });
   ob.observe(document.body, {attributes:true, subtree:true});
 })();
 
-// --- JUEGO 6: JARDÍN (VERDE CLARO) ---
+// --- JUEGO 6: JARDÍN (TULIPANES Y LLUVIA) ---
 (function(){
   const cvs = document.getElementById("canvasJardin"), ctx = cvs.getContext("2d");
-  function dTulip(x, y, col) {
-    ctx.strokeStyle = "#458B00"; ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y+80); ctx.stroke();
-    ctx.fillStyle = col;
-    ctx.beginPath(); ctx.ellipse(x, y-20, 15, 25, 0, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.fillText("✨", x-5, y-30);
+  let lluvia = [];
+  function drawTulip(x, y, col) {
+    ctx.strokeStyle="#458B00"; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x,y+70); ctx.stroke();
+    ctx.fillStyle=col;
+    ctx.beginPath(); // Pétalo izq
+    ctx.ellipse(x-10, y-15, 12, 22, -0.3, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); // Pétalo der
+    ctx.ellipse(x+10, y-15, 12, 22, 0.3, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); // Pétalo centro
+    ctx.ellipse(x, y-20, 10, 25, 0, 0, Math.PI*2); ctx.fill();
   }
   function loop(){
-    ctx.fillStyle = "#90EE90"; ctx.fillRect(0, 450, 800, 150); // Pasto claro
-    ctx.fillStyle = "#F0F8FF"; ctx.fillRect(0, 0, 800, 450); // Cielo
-    for(let i=0; i<25; i++) dTulip(40 + i*30, 460 + (i%4)*10, ["#FF69B4","#FFB6C1","#DB7093"][(i%3)]);
-    ctx.fillStyle="#FFD700"; for(let i=0;i<10;i++) ctx.fillText("✨", Math.random()*800, Math.random()*400);
+    ctx.fillStyle="#A2FF95"; ctx.fillRect(0, 450, 800, 150);
+    ctx.fillStyle="#F0F8FF"; ctx.fillRect(0, 0, 800, 450);
+    for(let i=0; i<25; i++) drawTulip(30+i*32, 470+(i%3)*10, ["#FF69B4","#FFB6C1","#DB7093"][i%3]);
+    if(Math.random()<0.1) lluvia.push({x:Math.random()*800, y:-20, v:3});
+    lluvia.forEach(f => { ctx.font="20px Arial"; ctx.fillText("🌸", f.x, f.y); f.y+=f.v; });
     requestAnimationFrame(loop);
   }
   const ob = new MutationObserver(()=>{ if(document.getElementById("juego6").style.display==="block") loop(); });
   ob.observe(document.body, {attributes:true, subtree:true});
 })();
 
-// --- JUEGO 7: TRIVIA NUEVA ---
+// --- JUEGO 7: TRIVIA (7 PREGUNTAS) ---
 (function(){
   const t = [
-    {p:"¿Cuál es el planeta más grande del sistema solar?", a:"Júpiter", o:["Marte", "Júpiter", "Saturno"]},
-    {p:"¿Qué animal es conocido como el 'Rey de la Selva'?", a:"León", o:["Tigre", "León", "Elefante"]},
-    {p:"¿En qué continente está la Torre Eiffel?", a:"Europa", o:["Asia", "Europa", "América"]}
+    {p:"¿Cuál es el océano más grande del mundo?", a:"Pacífico", o:["Atlántico","Índico","Ártico"]},
+    {p:"¿Cuántos días tiene un año bisiesto?", a:"366", o:["365","364","367"]},
+    {p:"¿En qué país está la Gran Muralla?", a:"China", o:["Japón","Corea","India"]},
+    {p:"¿Qué planeta es el 'Planeta Rojo'?", a:"Marte", o:["Venus","Júpiter","Mercurio"]},
+    {p:"¿Cuál es la capital de Italia?", a:"Roma", o:["Venecia","Milán","Florencia"]},
+    {p:"¿Cuántos colores tiene el arcoíris?", a:"7", o:["6","8","5"]},
+    {p:"¿Qué metal es líquido a temp. ambiente?", a:"Mercurio", o:["Oro","Plata","Cobre"]}
   ];
-  let idx = 0;
-  window.checkT = (o)=>{ if(o===t[idx].a){ idx++; rdr(); } else { alert("¡Nop! Intenta de nuevo ✨"); } };
+  let i = 0;
+  window.checkT = (a)=>{ if(a===t[i].a){ i++; rdr(); } };
   function rdr(){
-    if(idx>=t.length){ document.getElementById("juego7").innerHTML = `<div style="padding:40px; border-radius:30px; background:white; border:4px double var(--rosa);"><h2>✨ ¡SABES DEMASIADO! ✨</h2><p>Tu inteligencia me encanta.</p><button class="btn btn-verde" onclick="mostrar('juego8')">Siguiente Paso ➡️</button></div>`; return; }
-    document.getElementById("preguntaTrivia").innerText = t[idx].p;
-    document.getElementById("opcionesTrivia").innerHTML = t[idx].o.map(o=>`<button class="btn" style="background:#f8f9fa; color:#333; border: 1px solid #ddd" onclick="checkT('${o}')">${o}</button>`).join("");
+    if(i>=t.length){ document.getElementById("juego7").innerHTML = `<div class='card'><h2>✨ ¡INCREÍBLE! ✨</h2><button class='btn btn-primario' onclick="mostrar('juego8')">Siguiente</button></div>`; return; }
+    document.getElementById("pregT").innerText = t[i].p;
+    document.getElementById("optsT").innerHTML = [...t[i].o, t[i].a].sort().map(o=>`<button class='btn' style='background:white; display:block; width:100%;' onclick="checkT('${o}')">${o}</button>`).join("");
   }
   rdr();
 })();
 
-// --- JUEGO 8: CANCIONES (CRIS MJ / ARIANA / BAD BUNNY) ---
+// --- JUEGO 8: MICRÓFONO (CORREGIDO ARIANA) ---
 (function(){
   const l = [
-    {t:"Cris MJ - Gata Only", f:"Mami, no me digas que no, si yo sé...", a:"que tú estás puesta para mí", o:["que me quieres ver", "que tú estás puesta para mí", "que te gusto yo"]},
-    {t:"Ariana Grande - 34+35", f:"Can you stay up all night? Fuck me...", a:"'til the daylight", o:["all the time", "'til the daylight", "one more time"]},
-    {t:"Bad Bunny - Tití Me Preguntó", f:"Tití me preguntó si tengo...", a:"muchas novias", o:["una novia", "muchas novias", "un secreto"]}
+    {t:"Cris MJ - Gata Only", f:"Mami, no me digas que no, si yo sé...", a:"que tú estás puesta para mí", o:["que me quieres ver","que me gustas tú"]},
+    {t:"Ariana Grande - 34+35", f:"Can you stay up all night? Fuck me...", a:"'til the daylight", o:["all the time","one more time"]},
+    {t:"Bad Bunny - Tití Me Preguntó", f:"Tití me preguntó si tengo...", a:"muchas novias", o:["una novia","un secreto"]},
+    {t:"Ariana Grande - The Boy Is Mine", f:"Please separate it, boy, i'm...", a:"reading your mind", o:["losing my head","doing just fine"]},
+    {t:"Cuco - Lo Que Siento", f:"Solo a ti te quiero, solo a ti...", a:"te amo", o:["te extraño","te sueño"]}
   ];
-  let idx = 0;
-  window.checkL = (o)=>{ if(o===l[idx].a){ idx++; rdr(); } };
+  let i = 0;
+  window.checkL = (a)=>{ if(a===l[i].a){ i++; rdr(); } };
   function rdr(){
-    if(idx>=l.length){ document.getElementById("juego8").innerHTML = `<button class="btn btn-primario" onclick="mostrar('juego9')">¡Cantas increíble! 🎤</button>`; return; }
-    document.getElementById("tituloLetra").innerText = l[idx].t;
-    document.getElementById("fraseLetra").innerText = l[idx].f;
-    document.getElementById("opcionesLetra").innerHTML = l[idx].o.map(o=>`<button class="btn" style="background:#eee; display:block; width:100%;" onclick="checkL('${o}')">${o}</button>`).join("");
+    if(i>=l.length){ mostrar('juego9'); return; }
+    document.getElementById("titL").innerText = l[i].t;
+    document.getElementById("fraseL").innerText = l[i].f;
+    document.getElementById("optsL").innerHTML = [...l[i].o, l[i].a].sort().map(o=>`<button class='btn' style='background:#eee; width:100%;' onclick="checkL('${o}')">${o}</button>`).join("");
   }
   rdr();
 })();
 
-// --- JUEGO 9: ADIVINA ARTISTA ---
+// --- JUEGO 9: ADIVINA ARTISTA (4 RETOS) ---
 (function(){
-  const art = [
-    {e:"👁️ 🐰 🏎️", c:"bad bunny"},
-    {e:"🌙 🎤 👱🏻‍♀️", c:"ariana grande"},
-    {e:"🐱 🇨🇱 💸", c:"cris mj"},
-    {e:"☀️ 🇲🇽 🎙️", c:"luis miguel"}
-  ];
-  let idx = 0;
-  window.verificarArtista = () => {
-    const v = document.getElementById("entradaArtista").value.toLowerCase();
-    if(v.includes(art[idx].c)){ idx++; render(); }
-    else { alert("¡Casi! Intenta otra vez 🕵️"); }
+  const art = [{e:"👁️ 🐰 🏎️", c:"bad bunny"}, {e:"🌙 👱🏻‍♀️ 🎙️", c:"ariana grande"}, {e:"🐱 🇨🇱 💰", c:"cris mj"}, {e:"☀️ 🇲🇽 🎤", c:"luis miguel"}];
+  let i = 0;
+  window.checkA = () => {
+    if(document.getElementById("inA").value.toLowerCase().includes(art[i].c)) { i++; rdr(); }
+    else alert("¡Casi! Intenta de nuevo.");
   };
-  function render(){
-    if(idx>=art.length){ document.getElementById("juego9").innerHTML = `<h2>🎉 ¡ADIVINASTE TODO! 🎉</h2><button class="btn btn-primario" onclick="mostrar('juego10')">Ver Final ✨</button>`; return; }
-    document.getElementById("emojiArtista").innerText = art[idx].e;
-    document.getElementById("entradaArtista").value = "";
+  function rdr(){
+    if(i>=art.length){ mostrar('juego10'); return; }
+    document.getElementById("emojiA").innerText = art[i].e; document.getElementById("inA").value="";
   }
-  render();
+  rdr();
 })();
 
-// --- FUEGOS Y CORAZONES CARTA ---
+// --- FUEGOS Y CARTA ---
 (function(){
   const cvs = document.getElementById("canvasFuegos"), ctx = cvs.getContext("2d");
   let p = [];
   function anim(){
     ctx.fillStyle="rgba(0,0,20,0.2)"; ctx.fillRect(0,0,800,500);
-    if(Math.random()<0.1) {
+    if(Math.random()<0.1){
       let x=Math.random()*800, y=Math.random()*200, col="hsl("+Math.random()*360+",100%,50%)";
       for(let i=0; i<50; i++) p.push({x,y,vx:Math.random()*6-3, vy:Math.random()*6-3, l:80, c:col});
     }
-    p.forEach((it,i)=>{
-      ctx.fillStyle=it.c; ctx.fillRect(it.x, it.y, 3, 3); it.x+=it.vx; it.y+=it.vy; it.vy+=0.05; it.l--;
-      if(it.l<=0) p.splice(i,1);
-    });
+    p.forEach((it,idx)=>{ ctx.fillStyle=it.c; ctx.fillRect(it.x,it.y,3,3); it.x+=it.vx; it.y+=it.vy; it.vy+=0.05; it.l--; if(it.l<=0) p.splice(idx,1); });
     requestAnimationFrame(anim);
   }
   const ob = new MutationObserver(()=>{ if(document.getElementById("juego10").style.display==="block") anim(); });
@@ -407,13 +324,10 @@ setupHuye("canvasR1", "❤️"); setupHuye("canvasR2", "💜");
   function animC(){
     ctxC.clearRect(0,0,cvsC.width,cvsC.height);
     if(Math.random()<0.1) h.push({x:Math.random()*cvsC.width, y:cvsC.height+20, v:Math.random()*2+1, s:Math.random()*20+15});
-    h.forEach((it, i)=>{
-      ctxC.font = it.s+"px Arial"; ctxC.fillText("💗", it.x, it.y); it.y -= it.v;
-      if(it.y < -30) h.splice(i,1);
-    });
+    h.forEach((it,idx)=>{ ctxC.font=it.s+"px Arial"; ctxC.fillText("💗", it.x, it.y); it.y-=it.v; if(it.y<-30) h.splice(idx,1); });
     requestAnimationFrame(animC);
   }
-  const obC = new MutationObserver(()=>{ if(document.getElementById("cartaFinal").style.display==="block") { cvsC.width=window.innerWidth; cvsC.height=window.innerHeight; animC(); } });
+  const obC = new MutationObserver(()=>{ if(document.getElementById("cartaFinal").style.display==="block"){ cvsC.width=window.innerWidth; cvsC.height=window.innerHeight; animC(); } });
   obC.observe(document.body, {attributes:true, subtree:true});
 })();
 </script>
