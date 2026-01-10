@@ -9,120 +9,120 @@
       --rosa: #FF69B4; --rosa-fuerte: #C71585; --magenta: #DB7093; --bg: #FFF0F5;
       --oscuro: #0b132b; --azul: #00d4ff; --oro: #ffd700; --blanco: #ffffff;
     }
-    * { box-sizing: border-box; touch-action: manipulation; }
-    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); overflow-x: hidden; width: 100vw; }
+    * { box-sizing: border-box; touch-action: none; }
+    body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); overflow-x: hidden; width: 100vw; }
 
-    /* Efectos de Pétalos */
-    .petalo { position: fixed; color: var(--rosa); pointer-events: none; z-index: 999; animation: caida linear forwards; }
+    /* Efectos de fondo constantes */
+    .petalo { position: fixed; pointer-events: none; z-index: 999; animation: caida linear forwards; }
     @keyframes caida {
         0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
         100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
 
-    .pantalla { display: none; padding: 15px; text-align: center; min-height: 100vh; animation: fadeIn 0.5s ease; position: relative; width: 100%; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .pantalla { display: none; padding: 20px; text-align: center; min-height: 100vh; animation: fadeIn 0.6s ease-in-out; position: relative; width: 100%; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* UI y Botones */
-    .btn { margin: 10px; padding: 18px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; 
-           box-shadow: 0 8px 20px rgba(199, 21, 133, 0.3); font-size: 16px; width: 85%; max-width: 350px;
-           background: linear-gradient(45deg, var(--rosa), var(--rosa-fuerte)); color: white; text-transform: uppercase; }
-    .btn:active { transform: scale(0.95); }
+    /* Botones Estilizados */
+    .btn { margin: 15px auto; padding: 20px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; 
+           box-shadow: 0 10px 25px rgba(199, 21, 133, 0.3); font-size: 17px; text-transform: uppercase; letter-spacing: 1px;
+           display: block; width: 85%; max-width: 320px; background: linear-gradient(45deg, var(--rosa), var(--rosa-fuerte)); color: white; }
+    .btn:active { transform: scale(0.95); box-shadow: 0 5px 10px rgba(0,0,0,0.2); }
     
-    .btn-opcion { background: white; border: 3px solid var(--rosa-fuerte); color: var(--rosa-fuerte); width: 90%; max-width: 400px; margin: 10px auto; display: block; padding: 15px; border-radius: 20px; font-weight: bold; }
+    .btn-opcion { background: white; border: 3px solid var(--rosa-fuerte); color: var(--rosa-fuerte); width: 90%; max-width: 380px; margin: 12px auto; display: block; padding: 15px; border-radius: 20px; font-weight: bold; font-size: 16px; }
+    .btn-opcion:active { background: var(--rosa-fuerte); color: white; }
 
-    canvas { border: 6px solid white; border-radius: 30px; max-width: 95%; background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.1); display: block; margin: 15px auto; }
+    /* Canvas Responsivos */
+    canvas { border: 8px solid white; border-radius: 35px; max-width: 100%; background: white; box-shadow: 0 20px 50px rgba(0,0,0,0.15); display: block; margin: 15px auto; touch-action: none; }
     
-    .card { background: rgba(255, 255, 255, 0.9); padding: 25px; border-radius: 35px; border: 3px dashed var(--rosa-fuerte); margin: 15px auto; max-width: 500px; }
-    .frase-pantalla { font-style: italic; color: var(--rosa-fuerte); margin-bottom: 20px; font-size: 1.1em; font-weight: 500; }
+    .card { background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 40px; border: 3px dashed var(--rosa-fuerte); margin: 20px auto; max-width: 550px; backdrop-filter: blur(10px); }
+    .frase-pantalla { font-style: italic; color: var(--rosa-fuerte); margin-bottom: 25px; font-size: 1.2em; font-weight: 500; line-height: 1.4; }
     
-    input { padding: 15px; border-radius: 25px; border: 2px solid var(--rosa); width: 85%; margin: 10px; font-size: 16px; text-align: center; outline: none; }
+    input { padding: 18px; border-radius: 30px; border: 3px solid var(--rosa); width: 85%; margin: 15px auto; font-size: 18px; text-align: center; display: block; outline: none; }
   </style>
 </head>
 <body>
 
 <section id="bienvenida" class="pantalla" style="display:block;">
-  <div style="margin-top: 15vh;">
-    <h1 style="color:var(--rosa-fuerte); font-size: 2.5em;">¡Hola, mi niño!</h1>
-    <p class="frase-pantalla">"He preparado un viaje gigante solo para ti..."</p>
-    <div style="font-size:100px; animation: heartbeat 1.5s infinite;">💝</div>
+  <div style="margin-top: 12vh;">
+    <h1 style="color:var(--rosa-fuerte); font-size: 3em; margin-bottom: 0;">¡Hola, mi niño!</h1>
+    <p class="frase-pantalla">"He preparado un viaje mágico... ¿listo para entrar?"</p>
+    <div style="font-size:120px; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));">💝</div>
     <button class="btn" onclick="mostrar('juego_relleno')">Entrar a mi corazón ➡️</button>
   </div>
 </section>
 
 <section id="juego_relleno" class="pantalla">
-  <h2 style="color:var(--rosa-fuerte)">Rellena mi corazón</h2>
-  <p class="frase-pantalla">Desliza tu dedo dentro del corazón para darle vida.</p>
-  <canvas id="canvasRelleno" width="350" height="350"></canvas>
-  <div id="nextRelleno" style="display:none;"><button class="btn" onclick="mostrar('juego_intro')">¡Está lleno de amor! ✨</button></div>
+  <h2 style="color:var(--rosa-fuerte)">Dale vida a mi corazón</h2>
+  <p class="frase-pantalla">Desliza o toca dentro del corazón hasta que brille por completo.</p>
+  <canvas id="canvasRelleno" width="320" height="320"></canvas>
+  <div id="contRelleno" style="display:none;"><button class="btn" onclick="mostrar('juego_intro')">¡Está lleno de amor! ✨</button></div>
 </section>
 
 <section id="juego_intro" class="pantalla">
-  <h2 style="color:var(--rosa-fuerte)">Toca el cielo</h2>
-  <p class="frase-pantalla">¡Mueve tu dedo para que caigan pétalos mágicos!</p>
-  <div id="zona_petalos" style="width:100%; height:250px; border: 4px dashed var(--rosa); border-radius: 30px; margin: 20px 0; display: flex; align-items: center; justify-content: center; font-size: 40px; color:var(--rosa);">🌸 ✨ 🍃</div>
-  <button class="btn" onclick="mostrar('juego1')">Continuar aventura ✨</button>
+  <h2 style="color:var(--rosa-fuerte)">Toca el cielo...</h2>
+  <p class="frase-pantalla">¡Mueve tu dedo en el recuadro para que caigan flores!</p>
+  <div id="zona_petalos" style="width:100%; height:300px; border: 5px dashed var(--rosa); border-radius: 40px; margin: 20px 0; display: flex; align-items: center; justify-content: center; font-size: 50px; background: rgba(255,255,255,0.5);">🌸✨🍃</div>
+  <button class="btn" onclick="mostrar('juego1')">Empezar niveles ✨</button>
 </section>
 
 <section id="juego1" class="pantalla">
-  <h2 style="color:var(--rosa-fuerte)">Atrapa los corazones</h2>
-  <p class="frase-pantalla">Atrapa los 5 corazones rosados 💗 brillantes.</p>
-  <canvas id="canvasCorazones" width="350" height="450"></canvas>
-  <h2 id="puntos" style="color:var(--rosa-fuerte); font-size: 1.5em;">💗: 0/5</h2>
-  <button id="nextCorazones" class="btn" style="display:none;" onclick="mostrar('juego2')">¡Eres increíble! ➡️</button>
+  <h2 style="color:var(--rosa-fuerte)">Atrapa los 5 💗</h2>
+  <p class="frase-pantalla">Los <b>💗 brillantes</b> son los que valen. ¡Cuidado con los ❤️ rojos comunes!</p>
+  <canvas id="canvasCorazones" width="340" height="480"></canvas>
+  <h2 id="puntos" style="color:var(--rosa-fuerte); font-size: 2.2em; margin: 10px;">💗: 0/5</h2>
+  <div id="win1" style="display:none;"><button class="btn" onclick="mostrar('juego2')">¡Eres el mejor! Sigue ➡️</button></div>
 </section>
 
 <section id="juego2" class="pantalla">
   <h2 style="color:var(--rosa-fuerte)">🎨 El Color Prohibido</h2>
   <div class="card">
-    <p class="frase-pantalla">Si nuestro amor fuera un color invisible, ¿cuál elegirías?</p>
+    <p class="frase-pantalla">Si nuestro amor tuviera un color que nadie más puede ver, ¿cuál sería?</p>
     <div id="opcionesCol"></div>
-    <p id="intentos" style="font-weight:bold;">Intentos: 3</p>
-    <p id="mensajeCol" style="color:var(--rosa-fuerte); font-weight:bold; height:20px;"></p>
+    <p id="intentos" style="font-weight:bold; font-size: 1.2em;">Intentos: 3</p>
+    <p id="mensajeCol" style="color:var(--rosa-fuerte); font-weight:bold; height:30px;"></p>
   </div>
 </section>
 
 <section id="juego3" class="pantalla" style="background: radial-gradient(circle, #1b2735 0%, #090a0f 100%); color: white;">
-  <h2 style="color:var(--azul); margin-top: 30px;">🌌 Le Petit Prince</h2>
+  <h2 style="color:var(--azul); margin-top: 40px;">🌌 Le Petit Prince</h2>
   <div class="card" style="background: rgba(255,255,255,0.1); border-color: var(--azul); color: white;">
-    <p id="fraseP" style="font-size: 1.2em;"></p>
+    <p id="fraseP" style="font-size: 1.4em;"></p>
   </div>
   <div id="opcionesP"></div>
 </section>
 
 <section id="juego4" class="pantalla" style="background:#001d3d; color:white;">
-  <h2 style="color:var(--azul)">⚡ TORMENTA DE AMOR</h2>
-  <p class="frase-pantalla" style="color:var(--blanco)">¡Esquiva los rayos para salvar nuestro corazón!</p>
-  <canvas id="canvasEsquiva" width="350" height="450"></canvas>
-  <h3 id="energia">Escudo: 0%</h3>
-  <h3 id="vidasCielo">❤️❤️❤️</h3>
+  <h2 style="color:var(--azul)">⚡ TORMENTA ELÉCTRICA</h2>
+  <p class="frase-pantalla" style="color:white">¡Mueve el corazón 💖 para esquivar los rayos rápidos!</p>
+  <canvas id="canvasCielo" width="340" height="480"></canvas>
+  <div id="statsCielo" style="font-size: 1.5em; font-weight: bold;">Escudo: 0% | Vidas: ❤️❤️❤️</div>
 </section>
 
 <section id="juego5" class="pantalla">
-  <h2 style="color:var(--rosa-fuerte)">🌀 Laberinto Eléctrico</h2>
-  <p class="frase-pantalla">Llega a la meta sin tocar las paredes que se mueven.</p>
-  <h3 id="vidasLab">Vidas: ❤️❤️❤️</h3>
-  <canvas id="canvasLaberinto" width="350" height="500"></canvas>
+  <h2 style="color:var(--rosa-fuerte)">🌀 El Laberinto</h2>
+  <p class="frase-pantalla">Lleva a 👦🏻 hasta el portal rosa sin tocar las paredes eléctricas.</p>
+  <h3 id="vidasLab" style="font-size: 1.5em;">❤️❤️❤️</h3>
+  <canvas id="canvasLab" width="340" height="550"></canvas>
 </section>
 
-<section id="juego6" class="pantalla">
-  <h2 style="color:var(--rosa-fuerte)">🌷 Jardín de Tulipanes Neón</h2>
-  <p class="frase-pantalla">Mira cómo crecen y brillan para ti...</p>
-  <canvas id="canvasJardin" width="350" height="450"></canvas>
-  <button class="btn" onclick="mostrar('juego7')">Continuar al desafío ➡️</button>
+<section id="juego6" class="pantalla" style="background: #050505; color: white;">
+  <h2 style="color:var(--rosa)">🌷 Jardín de Tulipanes Neón</h2>
+  <p class="frase-pantalla" style="color:#aaa">Míralos crecer y brillar solo para ti...</p>
+  <canvas id="canvasJardin" width="340" height="480" style="background:#000; border-color:#333;"></canvas>
+  <button class="btn" onclick="mostrar('juego7')">Continuar al Desafío ➡️</button>
 </section>
 
 <section id="juego7" class="pantalla">
-  <h2 style="color:var(--rosa-fuerte)">🏆 Trivia de Sabiduría</h2>
-  <div class="card"><p id="pregT" style="font-weight:bold;"></p></div>
+  <h2 style="color:var(--rosa-fuerte)">🏆 Desafío de Sabiduría</h2>
+  <div class="card"><p id="pregT" style="font-size: 1.3em; font-weight: bold;"></p></div>
   <div id="optsT"></div>
 </section>
 
 <section id="juego8" class="pantalla">
-  <h2 style="color:var(--rosa-fuerte)">🎤 El Ritmo de nuestro Amor</h2>
-  <p class="frase-pantalla">Completa la letra de estas canciones:</p>
+  <h2 style="color:var(--rosa-fuerte)">🎤 Music Challenge</h2>
   <div class="card">
-    <p id="titL" style="font-size:0.8em; color:gray;"></p>
-    <p id="fraseL" style="font-size:1.1em; font-weight:bold;"></p>
+    <p id="titL" style="color:var(--rosa); font-weight: bold;"></p>
+    <p id="fraseL" style="font-size: 1.4em; font-weight: bold; margin: 15px 0;"></p>
   </div>
   <div id="optsL"></div>
 </section>
@@ -130,233 +130,251 @@
 <section id="juego9" class="pantalla">
   <h2 style="color:var(--rosa-fuerte)">🕵️ ¿Quién es el artista?</h2>
   <div class="card">
-    <p id="emojiA" style="font-size:60px;"></p>
-    <input type="text" id="inA" placeholder="Escribe aquí...">
-    <button class="btn" onclick="checkA()">Verificar Artista</button>
+    <div id="emojiA" style="font-size: 80px; margin-bottom: 20px;"></div>
+    <input type="text" id="inA" placeholder="Escribe el nombre...">
+    <button class="btn" onclick="checkA()">Verificar 🔍</button>
   </div>
 </section>
 
-<section id="juego10" class="pantalla" style="background:#000814; color:white;">
-  <h2 style="color:var(--oro)">¡LO LOGRASTE TODO! 🎇</h2>
-  <canvas id="canvasFuegos" width="350" height="450"></canvas>
-  <button class="btn" onclick="mostrar('cartaFinal')">Leer mi Carta Final 💌</button>
+<section id="juego10" class="pantalla" style="background:#000; color:white;">
+  <h2 style="color:var(--oro); font-size: 2.5em; margin-top: 50px;">¡FELICIDADES! 🎇</h2>
+  <p>Has superado todas las pruebas de mi corazón.</p>
+  <canvas id="canvasFuegos" width="340" height="450" style="background:#000; border:none;"></canvas>
+  <button class="btn" onclick="mostrar('cartaFinal')">Leer mi mensaje 💌</button>
 </section>
 
 <section id="cartaFinal" class="pantalla">
-  <canvas id="canvasCarta" style="position:fixed; top:0; left:0; pointer-events:none; z-index:1;"></canvas>
-  <div class="card" style="position:relative; z-index:10; text-align:justify; margin-top:10vh;">
-    <h3 style="color:var(--rosa-fuerte)">Para mi niño...</h3>
+  <canvas id="canvasCarta" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;"></canvas>
+  <div class="card" style="position:relative; z-index:10; text-align:justify; margin-top: 5vh; line-height: 1.6; font-size: 1.1em;">
+    <h3 style="color:var(--rosa-fuerte); text-align:center; font-size: 1.8em;">Para mi niño...</h3>
     <p>Quizá te demuestro muy poco y quizá esto no sea nada o, si lo es, no sea suficiente. No es que no quiera expresar o mostrar todo lo que siento... Me haces feliz y quiero poder hacerte igual de feliz. Gracias por estar y por aguantarme. Sé que me pongo tonta y sigo mejorando por ti para ser y poder entregarte lo mejor. ¡Muakkkk! ❤️</p>
-    <button class="btn" onclick="location.reload()">Empezar de nuevo</button>
+    <div style="text-align:center; font-size: 50px; margin-top: 20px;">🌹👑🤴🏻</div>
+    <button class="btn" style="margin-top: 30px;" onclick="location.reload()">Volver a empezar</button>
   </div>
 </section>
 
 <script>
-// NAVEGACIÓN GLOBAL
+// --- MOTOR DE NAVEGACIÓN ---
 function mostrar(id){
     document.querySelectorAll('.pantalla').forEach(p => p.style.display = 'none');
-    const target = document.getElementById(id);
-    target.style.display = 'block';
+    document.getElementById(id).style.display = 'block';
     window.scrollTo(0,0);
     
-    // Iniciar juegos específicos al mostrar
-    if(id === 'juego_relleno') initRelleno();
-    if(id === 'juego1') initCorazones();
-    if(id === 'juego4') initCielo();
-    if(id === 'juego5') initLaberinto();
-    if(id === 'juego6') initJardin();
-    if(id === 'juego10') initFuegos();
-    if(id === 'cartaFinal') initCarta();
+    if(id==='juego_relleno') initRelleno();
+    if(id==='juego1') initCorazones();
+    if(id==='juego4') initCielo();
+    if(id==='juego5') initLaberinto();
+    if(id==='juego6') initJardin();
+    if(id==='juego10') initFuegos();
+    if(id==='cartaFinal') initCarta();
 }
 
-const getT = (e, cvs) => {
-    const r = cvs.getBoundingClientRect();
-    const touch = e.touches ? e.touches[0] : e;
-    return { x: (touch.clientX - r.left) * (cvs.width / r.width), y: (touch.clientY - r.top) * (cvs.height / r.height) };
-};
+// --- UTILIDAD TOUCH ---
+function getTouchPos(e, cvs) {
+    const rect = cvs.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+        x: (clientX - rect.left) * (cvs.width / rect.width),
+        y: (clientY - rect.top) * (cvs.height / rect.height)
+    };
+}
 
-// --- JUEGO RELLENO ---
+// --- 1. JUEGO RELLENO ---
 function initRelleno() {
     const cvs = document.getElementById('canvasRelleno'), ctx = cvs.getContext('2d');
-    let pct = 0;
-    function draw(f) {
-        ctx.clearRect(0,0,350,350); ctx.save(); ctx.translate(175, 175);
+    let fill = 0;
+    function draw() {
+        ctx.clearRect(0,0,320,320); ctx.save(); ctx.translate(160, 160);
         ctx.beginPath();
         for(let t=0; t<Math.PI*2; t+=0.01){
-            let x = 12 * 16 * Math.pow(Math.sin(t), 3);
-            let y = -12 * (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+            let x = 11 * 16 * Math.pow(Math.sin(t), 3);
+            let y = -11 * (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
             ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = "#C71585"; ctx.lineWidth = 5; ctx.stroke();
-        ctx.clip(); ctx.fillStyle = "#FF69B4"; ctx.fillRect(-175, 175 - (f*3.5), 350, 350);
+        ctx.strokeStyle = "#C71585"; ctx.lineWidth = 4; ctx.stroke();
+        ctx.clip(); ctx.fillStyle = "#FF69B4"; ctx.fillRect(-160, 160 - (fill*3.2), 320, 320);
         ctx.restore();
     }
-    const update = (e) => { e.preventDefault(); pct += 1.5; draw(pct); if(pct>=100) document.getElementById('nextRelleno').style.display='block'; };
-    cvs.addEventListener('touchmove', update); cvs.addEventListener('mousemove', update);
-    draw(0);
+    const move = (e) => { e.preventDefault(); fill += 0.8; draw(); if(fill>=100) document.getElementById('contRelleno').style.display='block'; };
+    cvs.addEventListener('touchmove', move); draw();
 }
 
-// --- PÉTALOS ---
-document.addEventListener('touchstart', (e) => {
-    if(Math.random() > 0.5) {
-        const p = document.createElement('div'); p.className = 'petalo';
-        p.style.left = e.touches[0].clientX + 'px'; p.style.top = e.touches[0].clientY + 'px';
-        p.innerText = ['🌸','🌷','✨','💖'][Math.floor(Math.random()*4)];
-        document.body.appendChild(p); setTimeout(() => p.remove(), 3000);
-    }
-});
-
-// --- CORAZONES 5/5 ---
+// --- 2. JUEGO CORAZONES (CORREGIDO) ---
 function initCorazones() {
     const cvs = document.getElementById('canvasCorazones'), ctx = cvs.getContext('2d');
     let pts = 0, items = [];
-    for(let i=0; i<40; i++) items.push({x:Math.random()*300+25, y:Math.random()*400+25, t:Math.random()<0.15?'💗':'❤️', v:true, s:Math.random()*10+30});
-    function loop() {
-        ctx.clearRect(0,0,350,450);
-        items.forEach(it => { if(it.v){ ctx.font=it.s+"px Arial"; ctx.fillText(it.t, it.x, it.y); }});
-        if(pts < 5) requestAnimationFrame(loop);
+    // Aseguramos que haya bastantes de colores
+    for(let i=0; i<45; i++) {
+        items.push({
+            x: Math.random()*280+30, y: Math.random()*420+30,
+            t: Math.random() < 0.2 ? '💗' : '❤️',
+            v: true, s: Math.random()*15+30
+        });
     }
-    const touch = (e) => {
-        const p = getT(e, cvs);
+    function draw() {
+        ctx.clearRect(0,0,340,480);
+        items.forEach(it => { if(it.v){ ctx.font=it.s+"px Arial"; ctx.fillText(it.t, it.x, it.y); }});
+        if(pts < 5) requestAnimationFrame(draw);
+    }
+    cvs.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const p = getTouchPos(e, cvs);
         items.forEach(it => {
-            if(it.v && Math.hypot(it.x-p.x, it.y-p.y) < 35){
-                it.v = false; if(it.t==='💗'){ pts++; document.getElementById('puntos').innerText=`💗: ${pts}/5`; if(pts>=5) document.getElementById('nextCorazones').style.display='block'; }
+            if(it.v && Math.hypot(it.x - p.x, it.y - p.y) < 40) {
+                it.v = false;
+                if(it.t === '💗') {
+                    pts++;
+                    document.getElementById('puntos').innerText = `💗: ${pts}/5`;
+                    if(pts >= 5) document.getElementById('win1').style.display = 'block';
+                }
             }
         });
-    };
-    cvs.addEventListener('touchstart', touch); loop();
+    });
+    draw();
 }
 
-// --- COLOR TROLL ---
+// --- 3. COLOR TROLL ---
 (function(){
-    let tri = 3; const ops = ["Rojo Pasión", "Azul Cielo", "Verde Neón", "Amarillo Sol"];
+    let t = 3; const c = ["Morado Galaxia", "Azul Profundo", "Rosa Neón", "Blanco Puro"];
     window.selCol = (btn) => {
-        tri--; if(tri>0){ document.getElementById('mensajeCol').innerText = "¡Nop! Intenta otro..."; btn.style.opacity="0.3"; }
-        else { document.getElementById('mensajeCol').innerText = "¡SÍ! Nuestro amor es invisible e infinito.";
-               document.getElementById('opcionesCol').innerHTML = `<button class="btn" onclick="mostrar('juego3')">Eres brillante ➡️</button>`; }
-        document.getElementById('intentos').innerText = `Intentos: ${tri}`;
-    };
-    document.getElementById('opcionesCol').innerHTML = ops.map(c => `<button class="btn-opcion" onclick="selCol(this)">${c}</button>`).join('');
+        t--; if(t > 0) { document.getElementById('mensajeCol').innerText = "Nop... ese color es muy aburrido."; btn.style.opacity="0.2"; }
+        else { document.getElementById('mensajeCol').innerText = "¡SÍ! Nuestro color es invisible al ojo común.";
+               document.getElementById('opcionesCol').innerHTML = `<button class="btn" onclick="mostrar('juego3')">Eres increíble ➡️</button>`; }
+        document.getElementById('intentos').innerText = `Intentos: ${t}`;
+    }
+    document.getElementById('opcionesCol').innerHTML = c.map(it => `<button class="btn-opcion" onclick="selCol(this)">${it}</button>`).join('');
 })();
 
-// --- PRINCIPITO ---
+// --- 4. PRINCIPITO ---
 (function(){
-    const f = [{q:"Lo esencial es invisible...", a:"a los ojos"},{q:"Fue el tiempo que pasaste con tu rosa...", a:"lo que la hizo importante"}];
-    let curr = 0;
-    window.checkP = (a) => { if(a===f[curr].a){ curr++; if(curr<f.length) r(); else mostrar('juego4'); } };
-    function r(){
-        document.getElementById('fraseP').innerText = `"${f[curr].q}"`;
-        let o = [f[curr].a, "al corazón", "a las nubes"].sort(()=>Math.random()-0.5);
-        document.getElementById('opcionesP').innerHTML = o.map(it => `<button class="btn-opcion" style="color:var(--azul); border-color:var(--azul); background:transparent;" onclick="checkP('${it}')">${it}</button>`).join('');
-    } r();
+    const f = [{q:"Lo esencial es invisible...", a:"a los ojos"}, {q:"Fue el tiempo que pasaste con tu rosa lo que...", a:"la hizo tan importante"}];
+    let cur = 0;
+    window.checkP = (a) => { if(a===f[cur].a){ cur++; if(cur<f.length) render(); else mostrar('juego4'); } }
+    function render(){
+        document.getElementById('fraseP').innerText = `"${f[cur].q}"`;
+        let ops = [f[cur].a, "al corazón", "al alma"].sort(()=>Math.random()-0.5);
+        document.getElementById('opcionesP').innerHTML = ops.map(o => `<button class="btn-opcion" style="color:var(--azul); border-color:var(--azul); background:transparent;" onclick="checkP('${o}')">${o}</button>`).join('');
+    } render();
 })();
 
-// --- CIELO EXTREMO ---
+// --- 5. CIELO EXTREMO ---
 function initCielo() {
-    const cvs = document.getElementById('canvasEsquiva'), ctx = cvs.getContext('2d');
-    let shipX = 175, shield = 0, bolts = [], lives = 3, active = true;
-    cvs.addEventListener('touchmove', (e) => { e.preventDefault(); shipX = getT(e, cvs).x; });
+    const cvs = document.getElementById('canvasCielo'), ctx = cvs.getContext('2d');
+    let x = 170, shield = 0, bolts = [], lives = 3, active = true;
+    cvs.addEventListener('touchmove', (e) => { e.preventDefault(); x = getTouchPos(e, cvs).x; });
     function loop() {
         if(!active) return;
-        ctx.fillStyle = "#001d3d"; ctx.fillRect(0,0,350,450);
-        ctx.font = "40px Arial"; ctx.fillText("💖", shipX-20, 420);
-        if(Math.random() < 0.25) bolts.push({x: Math.random()*330, y: -20, v: 8 + Math.random()*7});
+        ctx.fillStyle = "#001d3d"; ctx.fillRect(0,0,340,480);
+        ctx.font = "45px Arial"; ctx.fillText("💖", x-22, 440);
+        if(Math.random() < 0.28) bolts.push({x: Math.random()*320, y: -20, v: 9 + Math.random()*8});
         bolts.forEach((b, i) => {
             ctx.fillText("⚡", b.x, b.y); b.y += b.v;
-            if(Math.hypot(b.x-shipX, b.y-410) < 40) { lives--; bolts.splice(i, 1); document.getElementById('vidasCielo').innerText = "❤️".repeat(lives); if(lives<=0){ lives=3; shield=0; } }
+            if(Math.hypot(b.x-x, b.y-430) < 40) { lives--; bolts.splice(i,1); if(lives<=0){ lives=3; shield=0; } }
         });
-        shield += 0.3; document.getElementById('energia').innerText = `Escudo: ${Math.floor(Math.min(100, shield))}%`;
-        if(shield >= 100){ active=false; mostrar('juego5'); } else requestAnimationFrame(loop);
+        shield += 0.25;
+        document.getElementById('statsCielo').innerText = `Escudo: ${Math.floor(Math.min(100, shield))}% | Vidas: ${"❤️".repeat(lives)}`;
+        if(shield >= 100) { active=false; mostrar('juego5'); } else requestAnimationFrame(loop);
     } loop();
 }
 
-// --- LABERINTO ---
+// --- 6. LABERINTO ---
 function initLaberinto() {
-    const cvs = document.getElementById('canvasLaberinto'), ctx = cvs.getContext('2d');
+    const cvs = document.getElementById('canvasLab'), ctx = cvs.getContext('2d');
     let pos = {x:30, y:30}, active = true, lives = 3;
-    let walls = [{x:0, y:120, w:250, h:30, s:8},{x:100, y:250, w:250, h:30, s:-10},{x:0, y:380, w:280, h:30, s:12}];
-    cvs.addEventListener('touchmove', (e) => { e.preventDefault(); const p = getT(e, cvs); pos = p; });
+    let walls = [{x:0, y:130, w:260, h:30, s:10}, {x:80, y:280, w:260, h:30, s:-12}, {x:0, y:430, w:260, h:30, s:14}];
+    cvs.addEventListener('touchmove', (e) => { e.preventDefault(); pos = getTouchPos(e, cvs); });
     function loop() {
         if(!active) return;
-        ctx.clearRect(0,0,350,500); ctx.fillStyle = "#C71585";
-        ctx.beginPath(); ctx.arc(310, 460, 30, 0, 7); ctx.fill(); // Meta
+        ctx.clearRect(0,0,340,550); ctx.fillStyle = "#C71585";
+        ctx.beginPath(); ctx.arc(300, 510, 30, 0, 7); ctx.fill(); // Meta
         walls.forEach(w => {
-            w.w += w.s; if(w.w > 330 || w.w < 50) w.s *= -1; ctx.fillRect(w.x, w.y, w.w, w.h);
-            if(pos.x > w.x && pos.x < w.x+w.w && pos.y > w.y && pos.y < w.y+w.h) { lives--; pos={x:30,y:30}; document.getElementById('vidasLab').innerText = "Vidas: "+"❤️".repeat(lives); if(lives<=0) lives=3; }
+            w.w += w.s; if(w.w > 320 || w.w < 60) w.s *= -1; ctx.fillRect(w.x, w.y, w.w, w.h);
+            if(pos.x > w.x && pos.x < w.x+w.w && pos.y > w.y && pos.y < w.y+w.h) { lives--; pos={x:30,y:30}; document.getElementById('vidasLab').innerText = "❤️".repeat(lives); if(lives<=0) lives=3; }
         });
-        ctx.font = "30px Arial"; ctx.fillText("👦🏻", pos.x-15, pos.y+15);
-        if(pos.x > 280 && pos.y > 430){ active=false; mostrar('juego6'); } else requestAnimationFrame(loop);
+        ctx.font = "35px Arial"; ctx.fillText("👦🏻", pos.x-17, pos.y+15);
+        if(pos.x > 270 && pos.y > 480) { active=false; mostrar('juego6'); } else requestAnimationFrame(loop);
     } loop();
 }
 
-// --- TULIPANES NEÓN ---
+// --- 7. TULIPANES ---
 function initJardin() {
     const cvs = document.getElementById('canvasJardin'), ctx = cvs.getContext('2d');
-    let f = []; const cols = ["#FF00FF", "#00FFFF", "#FFFF00", "#FF0000"];
-    for(let i=0; i<8; i++) f.push({x: 40+i*42, y: 400, c: cols[i%4], h: 0, b: 0});
+    let f = []; const colors = ["#FF00FF", "#00FFFF", "#FFFF00", "#FF69B4"];
+    for(let i=0; i<10; i++) f.push({x: 35+i*30, y: 440, c: colors[i%4], h: 0, b: 0});
     function loop() {
-        ctx.fillStyle = "#000"; ctx.fillRect(0,0,350,450);
+        ctx.fillStyle = "black"; ctx.fillRect(0,0,340,480);
         f.forEach(it => {
-            if(it.h < 120) it.h += 0.8; it.b = 15 + Math.sin(Date.now()/200)*10;
-            ctx.shadowBlur = it.b; ctx.shadowColor = it.c; ctx.strokeStyle = "#0f0"; ctx.lineWidth = 3;
+            if(it.h < 130) it.h += 0.7; it.b = 15 + Math.sin(Date.now()/200)*10;
+            ctx.shadowBlur = it.b; ctx.shadowColor = it.c;
+            ctx.strokeStyle = "#0f0"; ctx.lineWidth = 3;
             ctx.beginPath(); ctx.moveTo(it.x, it.y); ctx.lineTo(it.x, it.y-it.h); ctx.stroke();
-            ctx.fillStyle = it.c; ctx.beginPath(); ctx.ellipse(it.x, it.y-it.h-15, 12, 20, 0, 0, 7); ctx.fill();
+            ctx.fillStyle = it.c; ctx.beginPath(); ctx.ellipse(it.x, it.y-it.h-15, 10, 18, 0, 0, 7); ctx.fill();
         }); ctx.shadowBlur = 0; requestAnimationFrame(loop);
     } loop();
 }
 
-// --- TRIVIA, CANCIONES, EMOJIS ---
+// --- 8. TRIVIA (7 PREGUNTAS) ---
 (function(){
     const t = [
-        {p:"¿País de la Torre Eiffel?", a:"Francia"},{p:"¿Animal más grande?", a:"Ballena Azul"},
-        {p:"¿Planeta Rojo?", a:"Marte"},{p:"¿Color de la esmeralda?", a:"Verde"},
-        {p:"¿Sentido del oído?", a:"Escuchar"},{p:"¿Día después de martes?", a:"Miércoles"},{p:"¿Estrella del día?", a:"Sol"}
+        {p:"¿En qué país está la Torre Eiffel?", a:"Francia"}, {p:"¿Planeta más cercano al Sol?", a:"Mercurio"},
+        {p:"¿Animal más rápido?", a:"Guepardo"}, {p:"¿Color de las esmeraldas?", a:"Verde"},
+        {p:"¿Quién pintó la Mona Lisa?", a:"Da Vinci"}, {p:"¿Cuántos continentes hay?", a:"7"}, {p:"¿País de la Gran Muralla?", a:"China"}
     ];
-    let ti = 0; window.ansT = (a) => { if(a===t[ti].a){ ti++; if(ti<t.length) r(); else mostrar('juego8'); } };
-    function r(){ document.getElementById('pregT').innerText=t[ti].p; let o=[t[ti].a,"Japón","Tiburón"].sort(()=>Math.random()-0.5); document.getElementById('optsT').innerHTML=o.map(it=>`<button class="btn-opcion" onclick="ansT('${it}')">${it}</button>`).join(''); } r();
+    let i = 0; window.ansT = (a) => { if(a===t[i].a){ i++; if(i<t.length) r(); else mostrar('juego8'); } }
+    function r(){ document.getElementById('pregT').innerText=t[i].p; let o=[t[i].a, "Marte", "África"].sort(()=>Math.random()-0.5); document.getElementById('optsT').innerHTML=o.map(it=>`<button class="btn-opcion" onclick="ansT('${it}')">${it}</button>`).join(''); } r();
+})();
 
+// --- 9. CANCIONES (5) ---
+(function(){
     const s = [
-        {t:"Ariana - 34+35", f:"Can you stay up all night?...", a:"til the daylight"},
-        {t:"Cris MJ - Gata Only", f:"Mami no me digas que no...", a:"si yo sé"},
+        {t:"Ariana Grande - 34+35", f:"Can you stay up all night?...", a:"til the daylight"},
+        {t:"Cris MJ - Gata Only", f:"Mami no me digas que no si yo sé...", a:"que tú estás puesta"},
         {t:"Bad Bunny - Tití", f:"Tití me preguntó si tengo...", a:"muchas novias"},
         {t:"Cuco - Lo Que Siento", f:"Solo a ti te quiero...", a:"te amo"},
         {t:"Ariana - The Boy Is Mine", f:"Please separate it boy...", a:"i'm reading your mind"}
     ];
-    let si = 0; window.ansS = (a) => { if(a===s[si].a){ si++; if(si<s.length) rs(); else mostrar('juego9'); } };
-    function rs(){ document.getElementById('titL').innerText=s[si].t; document.getElementById('fraseL').innerText=s[si].f; let o=[s[si].a,"forever","baby"].sort(()=>Math.random()-0.5); document.getElementById('optsL').innerHTML=o.map(it=>`<button class="btn-opcion" onclick="ansS('${it}')">${it}</button>`).join(''); } rs();
-
-    const e = [{p:"🐰 👁️ 🇵🇷", a:"bad bunny"},{p:"🌙 🎤 🎀", a:"ariana grande"},{p:"🐱 🇨🇱 💸", a:"cris mj"}];
-    let ei = 0; window.checkA = () => { if(document.getElementById('inA').value.toLowerCase().includes(e[ei].a)){ ei++; if(ei<e.length) re(); else mostrar('juego10'); } };
-    function re(){ document.getElementById('emojiA').innerText=e[ei].p; document.getElementById('inA').value=""; } re();
+    let i=0; window.ansS = (a) => { if(a===s[i].a){ i++; if(i<s.length) r(); else mostrar('juego9'); } }
+    function r(){ document.getElementById('titL').innerText=s[i].t; document.getElementById('fraseL').innerText=s[i].f; let o=[s[i].a, "one more night", "your feelings"].sort(()=>Math.random()-0.5); document.getElementById('optsL').innerHTML=o.map(it=>`<button class="btn-opcion" onclick="ansS('${it}')">${it}</button>`).join(''); } r();
 })();
 
-// --- FUEGOS ARTIFICIALES ---
+// --- 10. EMOJIS ---
+(function(){
+    const e = [{p:"🐰 👁️ 🇵🇷", a:"bad bunny"}, {p:"🌙 🎤 🎀", a:"ariana grande"}, {p:"🐱 🇨🇱 💸", a:"cris mj"}];
+    let i=0; window.checkA = () => { if(document.getElementById('inA').value.toLowerCase().includes(e[i].a)){ i++; if(i<e.length) r(); else mostrar('juego10'); } }
+    function r(){ document.getElementById('emojiA').innerText=e[i].p; document.getElementById('inA').value=""; } r();
+})();
+
+// --- 11. FINAL ---
 function initFuegos() {
     const cvs = document.getElementById('canvasFuegos'), ctx = cvs.getContext('2d');
-    let part = [];
+    let p = [];
     function loop() {
-        ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.fillRect(0,0,350,450);
-        if(Math.random()<0.15){ 
-            let x=Math.random()*350, y=Math.random()*200, c=`hsl(${Math.random()*360},100%,60%)`;
-            for(let i=0; i<40; i++) part.push({x,y,vx:Math.random()*6-3, vy:Math.random()*6-3, l:70, c});
-        }
-        part.forEach((p,i) => { ctx.fillStyle=p.c; ctx.fillRect(p.x,p.y,3,3); p.x+=p.vx; p.y+=p.vy; p.vy+=0.05; p.l--; if(p.l<=0) part.splice(i,1); });
+        ctx.fillStyle = "rgba(0,0,0,0.2)"; ctx.fillRect(0,0,340,450);
+        if(Math.random()<0.12){ let x=Math.random()*340, y=Math.random()*200, c=`hsl(${Math.random()*360},100%,60%)`; for(let i=0; i<50; i++) p.push({x,y,vx:Math.random()*6-3, vy:Math.random()*6-3, l:80, c}); }
+        p.forEach((it,idx)=>{ ctx.fillStyle=it.c; ctx.fillRect(it.x,it.y,3,3); it.x+=it.vx; it.y+=it.vy; it.vy+=0.05; it.l--; if(it.l<=0)p.splice(idx,1); });
         requestAnimationFrame(loop);
     } loop();
 }
 
-// --- CARTA FINAL ---
 function initCarta() {
     const cvs = document.getElementById('canvasCarta'), ctx = cvs.getContext('2d');
-    cvs.width = window.innerWidth; cvs.height = window.innerHeight;
-    let hearts = [];
+    let p = [];
     function loop() {
         ctx.clearRect(0,0,cvs.width,cvs.height);
-        if(Math.random()<0.3) hearts.push({x:Math.random()*cvs.width, y:cvs.height+20, v:Math.random()*3+1, s:Math.random()*20+10});
-        hearts.forEach((h,i) => { ctx.font=h.s+"px Arial"; ctx.fillText("💗", h.x, h.y); h.y-=h.v; if(h.y<-50) hearts.splice(i,1); });
+        if(Math.random()<0.2) p.push({x:Math.random()*cvs.width, y:cvs.height+20, s:Math.random()*2+2, sz:Math.random()*20+15});
+        p.forEach((it,idx)=>{ ctx.font=it.sz+"px Arial"; ctx.fillText("💗", it.x, it.y); it.y-=it.s; if(it.y<-50)p.splice(idx,1); });
         requestAnimationFrame(loop);
     } loop();
 }
+
+// EFECTO PÉTALOS
+document.addEventListener('touchstart', (e) => {
+    const p = document.createElement('div'); p.className = 'petalo';
+    p.style.left = e.touches[0].clientX + 'px'; p.style.top = e.touches[0].clientY + 'px';
+    p.innerText = ['🌸','✨','💖'][Math.floor(Math.random()*3)];
+    document.body.appendChild(p); setTimeout(()=>p.remove(), 3000);
+});
 </script>
 </body>
 </html>
