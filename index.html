@@ -1,378 +1,271 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>PapitaWeb Mágica 🌸</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <style>
-    :root {
-      --rosa: #ff85a2; --rosa-fuerte: #ff4d6d; --magenta: #c9184a;
-      --bg-magic: linear-gradient(-45deg, #fff0f5, #ffe5ec, #ffc2d1, #ffb3c1);
-      --glass: rgba(255, 255, 255, 0.7);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para Mi Persona Favorita 🌸</title>
+    <style>
+        :root {
+            --rosa: #ff85a2; --rosa-fuerte: #ff4d6d; --magenta: #c9184a;
+            --bg: linear-gradient(-45deg, #fff0f5, #ffe5ec, #ffc2d1, #ffb3c1);
+            --glass: rgba(255, 255, 255, 0.85);
+        }
 
-    * { box-sizing: border-box; touch-action: manipulation; }
+        * { box-sizing: border-box; touch-action: none; -webkit-tap-highlight-color: transparent; }
 
-    body { 
-      margin:0; font-family: 'Georgia', serif; 
-      background: var(--bg-magic); 
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      color: #444; overflow-x: hidden;
-    }
+        body {
+            margin: 0; font-family: 'Georgia', serif;
+            background: var(--bg); background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #444; overflow: hidden; height: 100vh; width: 100vw;
+        }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    .pantalla { 
-      display:none; padding:25px; text-align:center; min-height:100vh;
-      animation: fadeIn 0.8s ease;
-    }
+        .pantalla {
+            display: none; padding: 15px; text-align: center;
+            height: 100vh; overflow-y: auto; animation: fadeIn 0.6s ease;
+        }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-    .card {
-      background: var(--glass);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 20px;
-      border: 1px solid rgba(255,255,255,0.5);
-      box-shadow: 0 8px 32px rgba(219, 112, 147, 0.15);
-      max-width: 600px; margin: 0 auto;
-    }
+        .card {
+            background: var(--glass); backdrop-filter: blur(10px);
+            border-radius: 25px; padding: 20px; border: 2px solid white;
+            box-shadow: 0 10px 30px rgba(219, 112, 147, 0.2);
+            max-width: 400px; margin: 10px auto;
+        }
 
-    .btn { 
-      margin:10px; padding:12px 25px; border:none; border-radius:50px; 
-      font-weight:bold; cursor:pointer; font-size: 16px;
-      transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
+        .btn {
+            margin: 8px; padding: 12px 20px; border: none; border-radius: 50px;
+            font-weight: bold; cursor: pointer; font-size: 15px;
+            background: var(--rosa); color: white; transition: 0.3s;
+        }
 
-    .btn-rosa { background: var(--rosa); color: white; }
-    .btn-rosa:hover { background: var(--rosa-fuerte); transform: scale(1.05); }
-    .btn-primario { background: var(--magenta); color: white; }
+        canvas {
+            background: white; border-radius: 20px;
+            width: 100%; height: auto; aspect-ratio: 1/1.2;
+            border: 2px solid #ffc2d1; touch-action: none;
+        }
 
-    canvas { 
-      border: 3px solid white; background: white; border-radius: 15px; 
-      max-width: 100%; height: auto; touch-action: none;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    }
-
-    #juego3, #juego4, #juego7, #juego8, #juego10 { background: #0b132b; color: #fff; }
-    
-    .letter-box { font-family: 'Verdana', sans-serif; line-height: 1.8; text-align: justify; }
-  </style>
+        .dark-section { background: #000014 !important; color: white !important; }
+        .dark-section .card { background: rgba(255,255,255,0.05); color: white; border-color: #333; }
+        
+        .song-list { text-align: left; font-size: 0.9em; color: #ffb6c1; list-style: none; padding: 0; }
+        .song-list li { margin-bottom: 5px; }
+    </style>
 </head>
 <body>
 
 <section id="bienvenida" class="pantalla" style="display:block;">
-  <div class="card" style="margin-top: 20vh;">
-    <h1 style="color:var(--magenta)">Hola, mi persona favorita ✨</h1>
-    <p>He creado este pequeño rincón para ti.<br>¿Me dejas enseñártelo?</p>
-    <button class="btn btn-rosa" onclick="mostrar('juego1')">Comenzar el Viaje 🌸</button>
-  </div>
+    <div class="card" style="margin-top: 25vh;">
+        <h1 style="color:var(--magenta)">¡Hola, Mi Amor! ✨</h1>
+        <p>He preparado una aventura mágica solo para ti.<br>¿Estás lista para empezar?</p>
+        <button class="btn" onclick="mostrar('juego1')">¡Empezar! 🌸</button>
+    </div>
 </section>
 
 <section id="juego1" class="pantalla">
-  <div class="card">
-    <div id="ronda1">
-      <h2 style="color:var(--magenta)">Ronda 1: Dibújame algo lindo 🎨</h2>
-      <canvas id="canvasDibujo" width="350" height="400"></canvas>
-      <br><button class="btn btn-rosa" onclick="pasarRonda(1)">Siguiente ➡️</button>
+    <div class="card">
+        <div id="ronda1">
+            <h2>Dibuja algo lindo 🎨</h2>
+            <canvas id="canvasDibujo" width="350" height="420"></canvas>
+            <br><button class="btn" onclick="pasarRonda(1)">Siguiente ➡️</button>
+        </div>
+        <div id="ronda2" style="display:none;">
+            <h2>Llena mi corazón ❤️</h2>
+            <p id="progresoTexto">Píntalo todo de rosa</p>
+            <canvas id="canvasFill" width="350" height="420"></canvas>
+            <br><button id="btnNextRonda2" class="btn" style="display:none;" onclick="pasarRonda(2)">¡Siguiente! ➡️</button>
+        </div>
+        <div id="ronda3" style="display:none;">
+            <h2>Atrapa 5 corazones 💗</h2>
+            <p id="puntos">Puntos: 0/5</p>
+            <canvas id="canvasCorazones" width="350" height="420"></canvas>
+            <br><button id="btnNext1" class="btn" style="display:none;" onclick="mostrar('juego2')">¡Reto Superado! ✨</button>
+        </div>
     </div>
-    <div id="ronda2" style="display:none;">
-      <h2 style="color:var(--magenta)">Ronda 2: Llena mi corazón ❤️</h2>
-      <p id="progresoTexto">¡Usa tu dedo para darle color!</p>
-      <canvas id="canvasFill" width="350" height="400"></canvas>
-      <br><button id="btnNextRonda2" class="btn btn-rosa" style="display:none;" onclick="pasarRonda(2)">Siguiente ➡️</button>
-    </div>
-    <div id="ronda3" style="display:none;">
-      <h2>Ronda 3: Atrapa los 💗</h2>
-      <p id="puntos">Puntos: 0/5</p>
-      <canvas id="canvasCorazones" width="350" height="400"></canvas>
-      <br><button id="btnNext1" class="btn btn-primario" style="display:none;" onclick="mostrar('juego2')">¡Reto Superado! ✨</button>
-    </div>
-  </div>
 </section>
 
 <section id="juego2" class="pantalla">
-  <div class="card">
-    <h2 style="color:var(--magenta)">🎨 Encuentra el color oculto</h2>
-    <p id="intentos">Tienes 3 intentos</p>
-    <div id="opciones"></div>
-    <p id="mensaje" style="color:#F08080"></p>
-  </div>
+    <div class="card">
+        <h2>🎨 Color Oculto</h2>
+        <div id="opcionesColores">
+            <button class="btn" style="background:#ADD8E6" onclick="falloColor()">Azul</button>
+            <button class="btn" style="background:#C2F0C2" onclick="falloColor()">Verde</button>
+            <button class="btn" onclick="ganarColor()" id="btnRosa" style="display:none; background:var(--rosa)">¡Rosa!</button>
+        </div>
+        <div id="secretoColor" style="display:none;">
+            <p>¡Exacto! El Rosa es el color de hoy ✨</p>
+            <button class="btn" onclick="mostrar('juego3')">Continuar</button>
+        </div>
+    </div>
 </section>
 
-<section id="juego3" class="pantalla">
-  <div class="card" style="background: rgba(11, 19, 43, 0.8);">
-    <h2>🚀 Viaje Estelar</h2>
-    <p id="frase"></p>
-    <div id="opcionesPrincipito"></div>
-    <p id="estado"></p>
-  </div>
+<section id="juego3" class="pantalla dark-section">
+    <div class="card">
+        <h2>🌹 El Principito</h2>
+        <p>"Lo esencial es invisible a..."</p>
+        <button class="btn" onclick="alert('Casi...')">Los ojos</button>
+        <button class="btn" onclick="mostrar('juego4')">Al corazón ❤️</button>
+    </div>
 </section>
 
-<section id="juego4" class="pantalla">
-  <div class="card" style="background: #0d1b2a;">
-    <h2>✨ PROTEGE NUESTRO CIELO ✨</h2>
-    <canvas id="canvasEsquiva" width="350" height="450" style="background:#0d1b2a; border:none;"></canvas>
-    <p id="energia">Energía del Amor: 0%</p>
-  </div>
+<section id="juego4" class="pantalla dark-section">
+    <div class="card">
+        <h2>✨ Protege nuestro cielo</h2>
+        <p id="energia">Energía del Amor: 0%</p>
+        <canvas id="canvasEsquiva" width="350" height="420"></canvas>
+    </div>
 </section>
 
-<section id="juego5" class="pantalla">
-  <div class="card">
-    <h2>💖 Laberinto Mágico</h2>
-    <p id="vidas">Vidas: ❤️ ❤️ ❤️</p>
-    <canvas id="canvasLaberinto" width="350" height="400" style="background:#fffaf0;"></canvas>
-  </div>
+<section id="juego5" class="pantalla dark-section">
+    <div class="card">
+        <h2>🎤 Completa la Letra</h2>
+        <p id="tituloCancion" style="color:var(--rosa)">Die With A Smile</p>
+        <p>"If the world was ending, I'd wanna be..."</p>
+        <button class="btn" onclick="mostrar('juego6')">Next to you 👩‍❤️‍👨</button>
+        <button class="btn" onclick="alert('¡Nooo!')">Alone</button>
+    </div>
 </section>
 
 <section id="juego6" class="pantalla">
-  <h2>🌸 Nuestro Jardín 🌸</h2>
-  <canvas id="canvasJardin" width="350" height="500"></canvas>
-  <br><button class="btn btn-primario" onclick="mostrar('juego7')">Continuar ➡️</button>
+    <div class="card">
+        <h2>🕵️ Adivina el Artista</h2>
+        <p style="font-size: 50px;">☀️ 🌊 🕶️</p>
+        <input type="text" id="inputArtista" placeholder="¿Quién es?" style="padding:10px; border-radius:10px; border:1px solid #ccc; width:80%;">
+        <br><br>
+        <button class="btn" onclick="checkArtista()">Comprobar</button>
+    </div>
 </section>
 
-<section id="juego7" class="pantalla">
-  <div class="card" style="background: #121212;">
-    <h2 style="color:var(--rosa)">🎵 Trivia Musical 🎵</h2>
-    <p id="pregunta"></p>
-    <div id="opcionesTrivia"></div>
-  </div>
-</section>
-
-<section id="juego8" class="pantalla">
-  <div class="card" style="background: #1a1a1a;">
-    <h2 style="color:var(--rosa)">🎤 Completa la letra 🎤</h2>
-    <p id="tituloLetra" style="color:gray"></p>
-    <p id="fraseLetra" style="font-size: 1.2rem;"></p>
-    <div id="opcionesLetra"></div>
-  </div>
-</section>
-
-<section id="juego9" class="pantalla">
-  <div class="card">
-    <h2>🕵️ Adivina el Artista</h2>
-    <p id="emojiArtista" style="font-size:50px;"></p>
-    <input id="entradaArtista" type="text" placeholder="Escribe aquí..." style="padding:10px; border-radius:10px; border:1px solid #ccc;" />
-    <br><button class="btn btn-rosa" onclick="verificarArtista()">Comprobar</button>
-  </div>
-</section>
-
-<section id="juego10" class="pantalla">
-  <div class="card" style="background:#000014;">
-    <h2 style="color:var(--oro)">¡Felicidades, Amor! 🎉</h2>
-    <p>Has completado todos los retos.</p>
-    <ul style="list-style: none; padding: 0; color: #ffb6c1; font-size: 0.9em; text-align: left;">
-      <li>1. 🎵 The Boy Is Mine - Ariana Grande</li>
-      <li>2. 🎵 Lo Que Siento - Cuco</li>
-      <li>3. 🎵 Te Amaré - Silvio Rodríguez</li>
-      <li>4. 🎵 Obsesionado - Farruko</li>
-      <li>5. 🎵 Die With A Smile - Lady Gaga</li>
-    </ul>
-    <canvas id="canvasFuegos" width="350" height="300"></canvas>
-    <br><button class="btn btn-rosa" onclick="mostrar('cartaFinal')">Abrir Carta 💌</button>
-  </div>
+<section id="juego7" class="pantalla dark-section">
+    <div class="card">
+        <h2 style="color:var(--rosa)">¡LO LOGRASTE! 🎉</h2>
+        <p>Estas son algunas de las canciones que me recuerdan a ti:</p>
+        <ul class="song-list">
+            <li>1. 🎵 The Boy Is Mine - Ariana Grande</li>
+            <li>2. 🎵 Lo Que Siento - Cuco</li>
+            <li>3. 🎵 Te Amaré - Silvio Rodríguez</li>
+            <li>4. 🎵 Obsesionado - Farruko</li>
+            <li>5. 🎵 Die With A Smile - Lady Gaga</li>
+        </ul>
+        <canvas id="canvasFuegos" width="350" height="300" style="background:transparent; border:none;"></canvas>
+        <br>
+        <button class="btn" onclick="mostrar('cartaFinal')">Leer mi Carta 💌</button>
+    </div>
 </section>
 
 <section id="cartaFinal" class="pantalla">
-  <div class="card" style="background:#fffaf0; position:relative;">
-    <h2 style="color:var(--magenta)">Mi Carta Especial...</h2>
-    <div class="letter-box">
-      <p>Quizá te demuestro muy poco y quizá esto no sea nada o, si lo es, no sea suficiente... [Tu texto completo aquí]</p>
-      <p>Me haces feliz y quiero poder hacerte igual de feliz. Gracias por estar y por aguantarme. ¡Muakkkk! ❤️</p>
+    <div class="card" style="background:#fffaf0; text-align: left; padding: 25px; border: 1px solid #ddd;">
+        <h2 style="text-align:center; color:var(--magenta)">Para Ti ❤️</h2>
+        <div style="line-height: 1.6; font-size: 0.95em;">
+            <p>Quizá te demuestro muy poco y quizá esto no sea nada, pero para mí lo es todo.</p>
+            <p>Me haces feliz de una forma que no puedo explicar. Gracias por aguantarme, por estar ahí y por ser tú.</p>
+            <p>Eres mi persona favorita en todo el universo y siempre quiero que lo sepas.</p>
+            <p style="text-align: right; font-weight: bold; color: var(--magenta); margin-top:20px;">Te quiero muchísimo. <br> Siempre tuya. 🌸</p>
+        </div>
+        <button class="btn" style="width:100%" onclick="location.reload()">Recomenzar 🤗</button>
     </div>
-    <button class="btn btn-primario" onclick="location.reload()">Cerrar con un Abrazo 🤗</button>
-    <canvas id="canvasCarta" width="350" height="200" style="background:transparent; border:none;"></canvas>
-  </div>
 </section>
 
 <script>
-// --- LÓGICA DE NAVEGACIÓN ---
-function mostrar(id){
-  document.querySelectorAll('.pantalla').forEach(p=>p.style.display='none');
-  const el = document.getElementById(id);
-  if(el) el.style.display='block';
-  window.scrollTo(0,0);
-}
-
-function pasarRonda(n){
-  if(n===1){ document.getElementById("ronda1").style.display="none"; document.getElementById("ronda2").style.display="block"; iniciarRonda2(); }
-  if(n===2){ document.getElementById("ronda2").style.display="none"; document.getElementById("ronda3").style.display="block"; }
-}
-
-function getPos(e, canvas) {
-  const rect = canvas.getBoundingClientRect();
-  const clientX = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
-  const clientY = (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
-  return {
-    x: (clientX - rect.left) * (canvas.width / rect.width),
-    y: (clientY - rect.top) * (canvas.height / rect.height)
-  };
-}
-
-// --- RONDA 1: DIBUJO ---
-const canvaDibujo = document.getElementById("canvasDibujo"), ctxDibujo = canvaDibujo.getContext("2d");
-let dibujando = false;
-ctxDibujo.strokeStyle = "#ff85a2"; ctxDibujo.lineWidth = 4; ctxDibujo.lineCap = "round";
-
-const actDibujo = (e) => {
-  e.preventDefault();
-  if(!dibujando && e.type !== 'touchstart' && e.type !== 'mousedown') return;
-  if(e.type === 'mousedown' || e.type === 'touchstart') {
-    dibujando = true;
-    const p = getPos(e, canvaDibujo);
-    ctxDibujo.beginPath();
-    ctxDibujo.moveTo(p.x, p.y);
-  } else if(dibujando) {
-    const p = getPos(e, canvaDibujo);
-    ctxDibujo.lineTo(p.x, p.y);
-    ctxDibujo.stroke();
-  }
-};
-canvaDibujo.addEventListener("mousedown", actDibujo);
-canvaDibujo.addEventListener("mousemove", actDibujo);
-window.addEventListener("mouseup", () => dibujando = false);
-canvaDibujo.addEventListener("touchstart", actDibujo);
-canvaDibujo.addEventListener("touchmove", actDibujo);
-
-// --- RONDA 2: RELLENAR CORAZÓN ---
-const canvaFill = document.getElementById("canvasFill"), ctxFill = canvaFill.getContext("2d");
-let pixelesCorazon = 0;
-function iniciarRonda2() {
-  ctxFill.clearRect(0,0,350,400);
-  ctxFill.fillStyle = "#f0f0f0";
-  ctxFill.font = "350px Arial";
-  ctxFill.textAlign = "center";
-  ctxFill.textBaseline = "middle";
-  ctxFill.fillText("❤", 175, 200);
-  const data = ctxFill.getImageData(0,0,350,400);
-  pixelesCorazon = 0;
-  for(let i=0; i<data.data.length; i+=4) if(data.data[i] < 255) pixelesCorazon++;
-}
-function paint(e) {
-  e.preventDefault();
-  const p = getPos(e, canvaFill);
-  ctxFill.globalCompositeOperation = "source-atop";
-  ctxFill.fillStyle = "#ff4d6d";
-  ctxFill.beginPath(); ctxFill.arc(p.x, p.y, 35, 0, Math.PI*2); ctxFill.fill();
-  const data = ctxFill.getImageData(0,0,350,400);
-  let pintados = 0;
-  for(let i=0; i<data.data.length; i+=4) if(data.data[i] === 255 && data.data[i+1] === 77) pintados++;
-  if((pintados/pixelesCorazon) > 0.65) {
-    document.getElementById("progresoTexto").innerText = "¡Perfecto! ❤️";
-    document.getElementById("btnNextRonda2").style.display = "inline-block";
-  }
-}
-canvaFill.addEventListener("touchstart", paint);
-canvaFill.addEventListener("touchmove", paint);
-
-// --- RONDA 3: ATRAPAR ---
-const c3 = document.getElementById("canvasCorazones"), ctx3 = c3.getContext("2d");
-let puntos=0, arr3=[];
-function spawnR3(){
-  if(puntos>=5 || document.getElementById("ronda3").style.display==='none') return;
-  arr3.push({x:Math.random()*300+25, y:Math.random()*350+25, t:"💗"});
-  drawR3(); setTimeout(spawnR3, 800);
-}
-function drawR3(){
-  ctx3.clearRect(0,0,350,400); ctx3.font="40px Arial";
-  arr3.forEach(c=>ctx3.fillText(c.t, c.x, c.y));
-}
-c3.addEventListener("touchstart", (e)=>{
-  const p = getPos(e, c3);
-  arr3.forEach((c,i)=>{
-    if(Math.hypot(p.x-c.x, p.y-(c.y-20))<40){
-      puntos++; document.getElementById("puntos").innerText=`Puntos: ${puntos}/5`;
-      arr3.splice(i,1); if(puntos>=5) document.getElementById("btnNext1").style.display="block";
+    function mostrar(id){
+        document.querySelectorAll('.pantalla').forEach(p => p.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+        if(id === 'juego4') iniciarEsquiva();
+        if(id === 'juego7') iniciarFuegos();
     }
-  });
-});
-const obs1 = new MutationObserver(()=> { if(document.getElementById("ronda3").style.display==='block') spawnR3(); });
-obs1.observe(document.getElementById("ronda3"), {attributes:true});
 
-// --- JUEGO 2: COLORES ---
-(function(){
-  let intentos = 3;
-  const ops = [{n:"Azul", c:"#ADD8E6"}, {n:"Rojo", c:"#FFB2B2"}, {n:"Verde", c:"#C2F0C2"}, {n:"Amarillo", c:"#FFFFE0"}];
-  const div = document.getElementById("opciones");
-  div.innerHTML = ops.map(o => `<button class="btn" style="background:${o.c}" onclick="checkCol('${o.n}')">${o.n}</button>`).join("");
-  window.checkCol = (n) => {
-    intentos--;
-    if(intentos > 0) document.getElementById("mensaje").innerText = "¡Ese no es! 🤭";
-    else {
-      div.innerHTML = `<button class="btn btn-rosa" onclick="mostrar('juego3')">¿Y si pruebas el ROSADO del fondo? ✨</button>`;
+    function getPos(e, canvas) {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches ? e.touches[0] : e;
+        return {
+            x: (touch.clientX - rect.left) * (canvas.width / rect.width),
+            y: (touch.clientY - rect.top) * (canvas.height / rect.height)
+        };
     }
-  }
-})();
 
-// --- JUEGO 3: PRINCIPITO ---
-(function(){
-  const frases = [{t:"Lo esencial es invisible...", c:"a los ojos", o:["al corazón","a la mente","a los ojos"]}];
-  let id = 0;
-  window.checkP = (o) => { if(o===frases[id].c) mostrar('juego4'); else alert("Intenta de nuevo 🌹"); };
-  document.getElementById("frase").innerText = frases[id].t;
-  document.getElementById("opcionesPrincipito").innerHTML = frases[id].o.map(o => `<button class="btn" onclick="checkP('${o}')">${o}</button>`).join("");
-})();
+    // --- DIBUJO ---
+    const canvaD = document.getElementById("canvasDibujo"), ctxD = canvaD.getContext("2d");
+    let dib = false;
+    canvaD.addEventListener("touchstart", (e)=>{ e.preventDefault(); dib=true; const p=getPos(e,canvaD); ctxD.beginPath(); ctxD.moveTo(p.x,p.y); });
+    canvaD.addEventListener("touchmove", (e)=>{ e.preventDefault(); if(!dib)return; const p=getPos(e,canvaD); ctxD.lineTo(p.x,p.y); ctxD.strokeStyle="#ff85a2"; ctxD.lineWidth=5; ctxD.stroke(); });
+    canvaD.addEventListener("touchend", ()=>dib=false);
 
-// --- JUEGO 4: ESQUIVA (Móvil) ---
-(function(){
-  const cv = document.getElementById("canvasEsquiva"), cx = cv.getContext("2d");
-  let p = {x:175, y:400}, obs = [], energy = 0;
-  cv.addEventListener("touchmove", (e) => { p = getPos(e, cv); });
-  function loop(){
-    if(energy>=100) { mostrar('juego5'); return; }
-    cx.clearRect(0,0,350,450); cx.fillText("❤️", p.x, p.y);
-    if(Math.random()<0.05) obs.push({x:Math.random()*350, y:0});
-    obs.forEach((o,i) => {
-      o.y+=5; cx.fillText("☁️", o.x, o.y);
-      if(Math.hypot(p.x-o.x, p.y-o.y)<30) energy = Math.max(0, energy-5);
+    // --- RELLENO ---
+    const canvaF = document.getElementById("canvasFill"), ctxF = canvaF.getContext("2d");
+    let pixT = 0;
+    function iniciarRonda2() {
+        ctxF.fillStyle="#f0f0f0"; ctxF.font="380px Arial"; ctxF.textAlign="center"; ctxF.textBaseline="middle";
+        ctxF.fillText("❤", 175, 210);
+        const d = ctxF.getImageData(0,0,350,420).data;
+        pixT=0; for(let i=0; i<d.length; i+=4) if(d[i]<255) pixT++;
+    }
+    canvaF.addEventListener("touchmove", (e)=>{
+        e.preventDefault(); const p=getPos(e,canvaF);
+        ctxF.globalCompositeOperation="source-atop"; ctxF.fillStyle="#ff4d6d";
+        ctxF.beginPath(); ctxF.arc(p.x, p.y, 35, 0, Math.PI*2); ctxF.fill();
+        const d = ctxF.getImageData(0,0,350,420).data;
+        let ptd=0; for(let i=0; i<d.length; i+=4) if(d[i]===255 && d[i+1]===77) ptd++;
+        if(ptd/pixT > 0.65) document.getElementById("btnNextRonda2").style.display="inline-block";
     });
-    energy += 0.2; document.getElementById("energia").innerText = `Energía: ${Math.floor(energy)}%`;
-    requestAnimationFrame(loop);
-  }
-  const obs4 = new MutationObserver(()=> { if(document.getElementById("juego4").style.display==='block') loop(); });
-  obs4.observe(document.getElementById("juego4"), {attributes:true});
-})();
 
-// --- JUEGO 6: JARDÍN ---
-(function(){
-  const cv = document.getElementById("canvasJardin"), cx = cv.getContext("2d");
-  function draw(){
-    cx.fillStyle="#fff"; cx.fillRect(0,0,350,500);
-    for(let i=0; i<15; i++){
-      cx.fillText("🌷", Math.random()*300+20, Math.random()*400+50);
+    // --- ATRAPAR ---
+    const canvaC = document.getElementById("canvasCorazones"), ctxC = canvaC.getContext("2d");
+    let pts=0, listaC=[];
+    function spawnC() {
+        if(pts>=5 || document.getElementById("ronda3").style.display==='none') return;
+        listaC.push({x:Math.random()*280+30, y:Math.random()*350+30});
+        ctxC.clearRect(0,0,350,420); ctxC.font="40px Arial";
+        listaC.forEach(c=>ctxC.fillText("💗", c.x, c.y));
+        setTimeout(spawnC, 800);
     }
-    cx.fillStyle="#DB7093"; cx.font="20px Georgia"; cx.fillText("Un jardín para ti", 100, 480);
-  }
-  const obs6 = new MutationObserver(()=> { if(document.getElementById("juego6").style.display==='block') draw(); });
-  obs6.observe(document.getElementById("juego6"), {attributes:true});
-})();
+    canvaC.addEventListener("touchstart", (e)=>{
+        const p=getPos(e,canvaC);
+        listaC.forEach((c,i)=>{ if(Math.hypot(p.x-c.x, p.y-(c.y-25))<45){ pts++; listaC.splice(i,1); document.getElementById("puntos").innerText=`Puntos: ${pts}/5`; if(pts>=5)document.getElementById("btnNext1").style.display="block"; } });
+    });
 
-// --- JUEGOS FINALES (Trivia, Letras, Artista) ---
-// (Lógica simplificada para asegurar funcionamiento)
-window.verificarArtista = () => {
-  const val = document.getElementById("entradaArtista").value.toLowerCase();
-  if(val.includes("ariana") || val.includes("luis")) mostrar('juego10');
-  else alert("¡Casi! Pista: Es una de las canciones que te gustan");
-};
+    function pasarRonda(n) {
+        if(n===1) { document.getElementById("ronda1").style.display="none"; document.getElementById("ronda2").style.display="block"; iniciarRonda2(); }
+        if(n===2) { document.getElementById("ronda2").style.display="none"; document.getElementById("ronda3").style.display="block"; spawnC(); }
+    }
 
-// --- FUEGOS Y CARTA ---
-(function(){
-  const cv = document.getElementById("canvasFuegos"), cx = cv.getContext("2d");
-  function f() {
-    cx.fillStyle="rgba(0,0,0,0.1)"; cx.fillRect(0,0,350,300);
-    cx.fillStyle="pink"; cx.beginPath(); cx.arc(Math.random()*350, Math.random()*300, 2, 0, 7); cx.fill();
-    requestAnimationFrame(f);
-  }
-  const obs10 = new MutationObserver(()=> { if(document.getElementById("juego10").style.display==='block') f(); });
-  obs10.observe(document.getElementById("juego10"), {attributes:true});
-})();
+    // --- ESQUIVA ---
+    function iniciarEsquiva() {
+        const cv=document.getElementById("canvasEsquiva"), cx=cv.getContext("2d");
+        let en=0, player={x:175,y:350}, clouds=[];
+        cv.addEventListener("touchmove", (e)=>{ player=getPos(e,cv); });
+        function loop(){
+            if(en>=100){ mostrar('juego5'); return; }
+            cx.clearRect(0,0,350,420); cx.fillText("❤️", player.x-15, player.y);
+            if(Math.random()<0.05) clouds.push({x:Math.random()*330, y:0});
+            clouds.forEach((c,i)=>{ c.y+=5; cx.fillText("☁️", c.x, c.y); if(Math.hypot(player.x-c.x, player.y-c.y)<30) en=Math.max(0, en-8); });
+            en+=0.3; document.getElementById("energia").innerText=`Energía: ${Math.floor(en)}%`;
+            requestAnimationFrame(loop);
+        }
+        loop();
+    }
 
+    // --- FUEGOS ARTIFICIALES ---
+    function iniciarFuegos() {
+        const cv=document.getElementById("canvasFuegos"), cx=cv.getContext("2d");
+        let particles = [];
+        function createP() {
+            for(let i=0; i<30; i++) particles.push({x:175, y:150, vx:(Math.random()-0.5)*10, vy:(Math.random()-0.5)*10, c:`hsl(${Math.random()*360},100%,70%)`});
+        }
+        setInterval(createP, 1000);
+        function loop() {
+            cx.fillStyle="rgba(0,0,14,0.2)"; cx.fillRect(0,0,350,300);
+            particles.forEach((p,i)=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=0.1; cx.fillStyle=p.c; cx.fillRect(p.x,p.y,3,3); if(p.y>300) particles.splice(i,1); });
+            requestAnimationFrame(loop);
+        }
+        loop();
+    }
+
+    function falloColor() { document.getElementById("btnRosa").style.display="inline-block"; }
+    function ganarColor() { document.getElementById("opcionesColores").style.display="none"; document.getElementById("secretoColor").style.display="block"; }
+    function checkArtista() { if(document.getElementById("inputArtista").value.toLowerCase().includes("bad")) mostrar('juego7'); else alert("¡Pista: El conejo malo!"); }
 </script>
 </body>
 </html>
